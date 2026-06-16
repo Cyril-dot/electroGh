@@ -1,1032 +1,1181 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ELECTROHUB — Premium Custom Gear & PC Configurator</title>
-<!-- Google Fonts: Orbitron (Futuristic Headers) & Roboto (Clean Body) -->
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-<!-- GSAP & ScrollTrigger Animations CDN -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<style>
-  :root {
-    /* Cosmic Palette Tokens */
-    --color-bg-deep: #030611;
-    --color-bg-card: #0b0e1e;
-    --color-bg-inner: #0f132a;
-    --color-primary-blue: #0ea5e9;
-    --color-blue-glow: rgba(14, 165, 233, 0.25);
-    --color-neon-cyan: #06b6d4;
-    --color-cyan-glow: rgba(6, 182, 212, 0.3);
-    --color-text-bright: #f3f4f6;
-    --color-text-dim: #94a3b8;
-    --color-border-grid: #1e3a8a;
-    --color-success-green: #10b981;
-    --color-danger-red: #f43f5e;
-    --color-accent-orange: #f97316;
-    
-    /* Layout */
-    --font-heading: 'Orbitron', sans-serif;
-    --font-body: 'Roboto', sans-serif;
-    --radius-futuristic: 12px;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>ELECTROHUB · Mobile-first · Blue & Orange</title>
+  <!-- Fonts: Orbitron (headings) + Inter (body) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <style>
+    /* ===== RESET & BASE (mobile-first) ===== */
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: #0a0e1a;
+      color: #f1f5f9;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
-  body { background: var(--color-bg-deep); color: var(--color-text-bright); font-family: var(--font-body); overflow-x: hidden; }
+    :root {
+      --bg-deep: #0a0e1a;
+      --bg-card: #111827;
+      --bg-inner: #1a2332;
+      --primary-blue: #3b82f6;
+      --primary-glow: rgba(59,130,246,0.25);
+      --neon-orange: #f97316;
+      --orange-glow: rgba(249,115,22,0.2);
+      --text-bright: #f1f5f9;
+      --text-dim: #94a3b8;
+      --border-grid: #1e293b;
+      --success: #22c55e;
+      --danger: #ef4444;
+      --font-heading: 'Orbitron', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --radius: 12px;
+      --nav-height: 68px;
+    }
 
-  /* SCROLLBAR */
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: var(--color-bg-deep); }
-  ::-webkit-scrollbar-thumb { background: var(--color-primary-blue); border-radius: 10px; }
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg-deep); }
+    ::-webkit-scrollbar-thumb { background: var(--primary-blue); border-radius: 20px; }
 
-  /* NAV SYSTEM */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; height: 80px; display: flex; align-items: center; justify-content: space-between;
-    padding: 0 5%; z-index: 1000; background: rgba(3, 6, 17, 0.75); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--color-border-grid); transition: background 0.3s;
-  }
-  nav.scrolled { background: rgba(3, 6, 17, 0.95); border-bottom: 1px solid rgba(14, 165, 233, 0.3); }
-  .nav-logo { font-family: var(--font-heading); font-size: 26px; font-weight: 900; letter-spacing: 2px; color: #fff; cursor: pointer; text-shadow: 0 0 12px var(--color-cyan-glow); }
-  .nav-logo span { color: var(--color-primary-blue); }
-  .nav-links { display: flex; gap: 32px; }
-  .nav-links a { color: var(--color-text-dim); font-family: var(--font-heading); font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; transition: 0.3s; cursor: pointer; }
-  .nav-links a:hover { color: var(--color-neon-cyan); text-shadow: 0 0 8px var(--color-cyan-glow); }
-  
-  .nav-right { display: flex; align-items: center; gap: 20px; }
-  .nav-search { background: var(--color-bg-inner); border: 1px solid var(--color-border-grid); border-radius: 99px; padding: 10px 20px 10px 42px; color: #fff; font-size: 13px; width: 200px; transition: 0.4s; font-family: var(--font-body); }
-  .nav-search:focus { width: 280px; border-color: var(--color-neon-cyan); }
-  .search-wrap { position: relative; }
-  .search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--color-text-dim); pointer-events: none; }
-  
-  .cart-btn { background: linear-gradient(135deg, var(--color-primary-blue), #0284c7); color: #fff; border: none; border-radius: 99px; padding: 10px 24px; font-family: var(--font-heading); font-size: 11px; font-weight: 700; letter-spacing: 1px; cursor: pointer; display: flex; align-items: center; gap: 10px; min-height: 44px; box-shadow: 0 0 15px var(--color-blue-glow); transition: 0.2s; }
-  .cart-btn:hover { transform: translateY(-1px); box-shadow: 0 0 25px rgba(14, 165, 233, 0.5); }
-  .cart-count { background: #fff; color: var(--color-bg-deep); border-radius: 50%; font-size: 10px; font-weight: 900; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; }
+    /* ===== TYPOGRAPHY ===== */
+    h1, h2, h3, .nav-logo, .btn, .cat-name, .slot-label, .metric-header, .product-brand, .cart-btn, .auth-btn {
+      font-family: var(--font-heading);
+      letter-spacing: 0.5px;
+    }
 
-  .hamburger { display: none; flex-direction: column; gap: 6px; cursor: pointer; }
-  .hamburger span { width: 24px; height: 2px; background: #fff; }
+    /* ===== NAV (mobile-first) ===== */
+    nav {
+      position: fixed; top:0; left:0; right:0; height: var(--nav-height);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 16px; z-index: 1000;
+      background: rgba(10,14,26,0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-grid);
+    }
+    .nav-logo { font-size: 20px; font-weight: 900; letter-spacing: 2px; color:#fff; text-shadow:0 0 16px var(--primary-glow); }
+    .nav-logo span { color: var(--neon-orange); }
+    .nav-links { display: none; } /* hidden on mobile, shown in hamburger */
+    .nav-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+    .nav-search { display: none; } /* hidden on mobile, search via filter bar */
+    .cart-btn {
+      background: linear-gradient(135deg, var(--primary-blue), #2563eb);
+      border: none; border-radius: 40px; padding: 8px 14px;
+      font-size: 11px; font-weight: 700; color:#fff;
+      display: flex; align-items: center; gap: 6px;
+      box-shadow: 0 0 16px var(--primary-glow); cursor: pointer;
+      min-height: 40px; transition: 0.2s;
+    }
+    .cart-btn:active { transform: scale(0.96); }
+    .cart-count {
+      background: #fff; color: var(--bg-deep); border-radius: 50%;
+      font-size: 10px; font-weight: 900; width: 20px; height: 20px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .auth-btn {
+      background: transparent; border: 1px solid var(--border-grid);
+      color: #fff; border-radius: 40px; padding: 6px 12px;
+      font-size: 10px; font-weight: 600; cursor: pointer;
+      min-height: 32px; transition: 0.2s;
+      white-space: nowrap;
+    }
+    .auth-btn:active { border-color: var(--neon-orange); color: var(--neon-orange); }
+    .auth-btn.primary {
+      background: linear-gradient(135deg, var(--primary-blue), #2563eb);
+      border: none; color: #fff;
+    }
+    .hamburger {
+      display: flex; flex-direction: column; gap: 4px;
+      cursor: pointer; padding: 4px;
+    }
+    .hamburger span {
+      width: 22px; height: 2.5px; background: #fff; border-radius: 4px;
+      transition: 0.3s;
+    }
+    .user-nav { display: flex; align-items: center; gap: 6px; }
+    .user-avatar {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary-blue), var(--neon-orange));
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-heading); font-weight: 700; font-size: 11px; color:#fff;
+    }
+    .user-name { display: none; } /* hide on mobile */
+    .logout-btn {
+      background: transparent; border: 1px solid var(--border-grid);
+      color: var(--text-dim); border-radius: 6px; padding: 2px 8px;
+      font-size: 9px; cursor: pointer; font-family: var(--font-heading);
+    }
+    .logout-btn:active { border-color: var(--danger); color: var(--danger); }
 
-  /* DRAWER OVERLAY */
-  .drawer-overlay { position: fixed; inset: 0; background: rgba(3,6,17,0.7); z-index: 2500; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
-  .drawer-overlay.open { opacity: 1; pointer-events: all; }
+    /* ===== MOBILE MENU ===== */
+    .mobile-menu {
+      display: none; position: fixed; top: var(--nav-height); left:0; right:0;
+      z-index: 999; background: var(--bg-card);
+      border-bottom: 1px solid var(--border-grid);
+      padding: 16px 20px; flex-direction: column; gap: 12px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      color: var(--text-dim); font-family: var(--font-heading);
+      font-size: 13px; font-weight: 600; letter-spacing: 1px;
+      text-transform: uppercase; text-decoration: none;
+      padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+    .mobile-menu a:active { color: var(--neon-orange); }
 
-  /* MOBILE NAV */
-  .mobile-menu { display: none; position: fixed; top: 80px; left: 0; right: 0; z-index: 999; background: var(--color-bg-card); border-bottom: 1px solid var(--color-border-grid); padding: 24px; flex-direction: column; gap: 20px; }
-  .mobile-menu.open { display: flex; }
-  .mobile-menu a { color: var(--color-text-dim); font-family: var(--font-heading); font-size: 13px; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.02); }
+    /* ===== HERO (mobile-first) ===== */
+    .hero {
+      margin-top: var(--nav-height);
+      padding: 24px 16px 40px;
+      display: flex; flex-direction: column; gap: 28px;
+      position: relative; min-height: 70vh;
+    }
+    .hero-bg-layer {
+      position: absolute; inset: 0; z-index: 0;
+      background-image:
+        radial-gradient(circle at 70% 20%, rgba(59,130,246,0.10) 0%, transparent 60%),
+        radial-gradient(circle at 30% 80%, rgba(249,115,22,0.06) 0%, transparent 50%),
+        linear-gradient(135deg, rgba(10,14,26,0.92), rgba(10,14,26,0.88)),
+        url('https://images.unsplash.com/photo-1542751371-adc6e648fed7?q=80&w=800&auto=format&fit=crop');
+      background-position: center; background-size: cover; background-repeat: no-repeat;
+    }
+    .hero-content { position: relative; z-index: 2; }
+    .hero-banner-title {
+      font-family: var(--font-heading); font-size: 10px; font-weight: 700;
+      letter-spacing: 3px; color: var(--neon-orange);
+      text-transform: uppercase; margin-bottom: 12px;
+      display: inline-block; border-left: 3px solid var(--neon-orange);
+      padding-left: 12px;
+    }
+    .hero h1 {
+      font-family: var(--font-heading); font-size: clamp(28px, 10vw, 44px);
+      font-weight: 900; line-height: 1.1; text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .hero h1 em {
+      font-style: normal; color: transparent;
+      -webkit-text-stroke: 1.5px var(--primary-blue);
+      text-shadow: 0 0 24px var(--primary-glow);
+    }
+    .hero p {
+      color: var(--text-dim); font-size: 14px; line-height: 1.7;
+      margin-bottom: 20px; max-width: 100%;
+    }
+    .hero-btns {
+      display: flex; flex-wrap: wrap; gap: 10px;
+    }
+    .btn-primary, .btn-outline {
+      padding: 12px 22px; font-size: 11px; font-weight: 700;
+      letter-spacing: 1.5px; border-radius: var(--radius);
+      cursor: pointer; transition: 0.2s; min-height: 44px;
+      display: inline-flex; align-items: center; gap: 8px;
+      text-transform: uppercase; font-family: var(--font-heading);
+      border: none;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary-blue), #2563eb);
+      color: #fff; box-shadow: 0 0 20px var(--primary-glow);
+      flex: 1 1 auto;
+    }
+    .btn-primary:active { transform: scale(0.97); }
+    .btn-outline {
+      background: transparent; color: #fff;
+      border: 1px solid var(--border-grid);
+      flex: 1 1 auto;
+    }
+    .btn-outline:active { border-color: var(--neon-orange); color: var(--neon-orange); }
 
-  /* REAL-LIFE HERO AREA */
-  .hero { margin-top: 80px; min-height: 85vh; display: grid; grid-template-columns: 1fr 1fr; align-items: center; padding: 0 5%; position: relative; overflow: hidden; gap: 40px; }
-  .hero-bg-layer {
-    position: absolute; inset: 0; z-index: 0;
-    background-image:
-      radial-gradient(circle at 100% 0%, rgba(14, 165, 233, 0.12) 0%, transparent 55%),
-      linear-gradient(to right, rgba(3,6,17,0.94), rgba(3,6,17,0.82)),
-      url('https://images.unsplash.com/photo-1542751371-adc6e648fed7?q=80&w=1920&auto=format&fit=crop');
-    background-position: center; background-size: cover; background-repeat: no-repeat;
-  }
-  .hero-content { position: relative; z-index: 2; }
-  .hero-banner-title { font-family: var(--font-heading); font-size: 11px; font-weight: 700; letter-spacing: 4px; color: var(--color-neon-cyan); text-transform: uppercase; margin-bottom: 16px; display: inline-block; border-left: 2px solid var(--color-neon-cyan); padding-left: 12px; }
-  .hero h1 { font-family: var(--font-heading); font-size: clamp(36px, 5vw, 68px); font-weight: 900; line-height: 1.1; letter-spacing: -1px; margin-bottom: 24px; text-transform: uppercase; }
-  .hero h1 em { font-style: normal; color: transparent; -webkit-text-stroke: 1.5px var(--color-primary-blue); text-shadow: 0 0 20px var(--color-blue-glow); }
-  .hero p { color: var(--color-text-dim); font-size: 16px; line-height: 1.7; margin-bottom: 32px; max-width: 500px; }
-  .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
-  
-  .btn-primary { background: linear-gradient(135deg, var(--color-primary-blue), #0284c7); color: #fff; border: none; border-radius: var(--radius-futuristic); padding: 16px 36px; font-family: var(--font-heading); font-size: 12px; font-weight: 700; letter-spacing: 2px; cursor: pointer; transition: 0.3s; text-transform: uppercase; min-height: 48px; display: flex; align-items: center; gap: 12px; }
-  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 30px rgba(14, 165, 233, 0.4); }
-  .btn-outline { background: transparent; color: #fff; border: 1px solid var(--color-border-grid); border-radius: var(--radius-futuristic); padding: 16px 36px; font-family: var(--font-heading); font-size: 12px; font-weight: 700; letter-spacing: 2px; cursor: pointer; transition: 0.3s; text-transform: uppercase; min-height: 48px; display: flex; align-items: center; gap: 12px; }
-  .btn-outline:hover { border-color: var(--color-neon-cyan); color: var(--color-neon-cyan); background: rgba(6, 182, 212, 0.05); }
+    .hero-visual { position: relative; z-index: 2; }
+    .hero-img-frame {
+      width: 100%; max-width: 100%; height: 220px;
+      border-radius: 20px; overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+      border: 1px solid rgba(59,130,246,0.15);
+      position: relative;
+    }
+    .hero-img-frame img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    .hero-img-overlay {
+      position: absolute; bottom:0; left:0; right:0;
+      padding: 16px 18px;
+      background: linear-gradient(to top, rgba(10,14,26,0.92), transparent);
+      display: flex; justify-content: space-between; align-items: flex-end;
+    }
+    .overlay-tag {
+      font-family: var(--font-heading); font-size: 9px;
+      letter-spacing: 2px; color: var(--neon-orange);
+      text-transform: uppercase;
+    }
+    .hero-img-overlay h3 {
+      font-family: var(--font-heading); font-size: 15px; color: #fff;
+      margin-top: 4px;
+    }
 
-  /* Hero Real-Life Image Framework */
-  .hero-visual { position: relative; z-index: 2; height: 100%; display: flex; align-items: center; justify-content: center; }
-  .hero-img-frame { width: 100%; max-width: 600px; height: 500px; border-radius: 24px; position: relative; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.8); border: 1px solid rgba(14, 165, 233, 0.3); }
-  .hero-img-frame img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s ease-out; }
-  .hero-img-frame:hover img { transform: scale(1.05); }
-  .hero-img-overlay { position: absolute; bottom: 0; left: 0; right: 0; padding: 24px; background: linear-gradient(to top, rgba(3,6,17,0.95), transparent); display: flex; justify-content: space-between; align-items: flex-end; }
-  .overlay-tag { font-family: var(--font-heading); font-size: 10px; letter-spacing: 2px; color: var(--color-neon-cyan); text-transform: uppercase; }
+    /* ===== WORKSPACE (mobile-first) ===== */
+    .workspace-section {
+      padding: 40px 16px;
+      border-top: 1px solid var(--border-grid);
+      border-bottom: 1px solid var(--border-grid);
+      background: radial-gradient(circle at 30% 30%, #0f172a 0%, var(--bg-deep) 100%);
+    }
+    .section-header {
+      display: flex; flex-direction: column; gap: 12px;
+      margin-bottom: 24px;
+    }
+    .section-header .btn-outline {
+      align-self: flex-start;
+      padding: 8px 16px; font-size: 10px; min-height: 36px;
+    }
+    .section-label {
+      font-family: var(--font-heading); font-size: 10px;
+      letter-spacing: 2px; color: var(--neon-orange);
+      text-transform: uppercase;
+    }
+    .section-title {
+      font-family: var(--font-heading); font-size: clamp(20px, 6vw, 28px);
+      font-weight: 900; color: #fff; text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .section-sub {
+      color: var(--text-dim); font-size: 13px; margin-top: 4px;
+    }
 
-  /* WORKSPACE CONFIGURATOR */
-  .workspace-section { padding: 80px 5%; border-top: 1px solid var(--color-border-grid); border-bottom: 1px solid var(--color-border-grid); background: radial-gradient(circle at 50% 50%, #060919 0%, var(--color-bg-deep) 100%); }
-  .section-header { margin-bottom: 40px; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 20px; }
-  .section-label { font-family: var(--font-heading); font-size: 11px; letter-spacing: 2px; color: var(--color-neon-cyan); text-transform: uppercase; margin-bottom: 8px; }
-  .section-title { font-family: var(--font-heading); font-size: clamp(24px, 4vw, 36px); font-weight: 900; color: #fff; text-transform: uppercase; }
-  
-  .workspace-grid { display: grid; grid-template-columns: 2.2fr 1fr; gap: 40px; margin-top: 40px; }
-  .workspace-slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
-  .workspace-slot { background: var(--color-bg-card); border: 1px solid var(--color-border-grid); border-radius: var(--radius-futuristic); padding: 20px; text-align: center; cursor: pointer; display: flex; flex-direction: column; justify-content: space-between; min-height: 180px; position: relative; transition: 0.3s; }
-  .workspace-slot.filled { border-color: var(--color-primary-blue); background: rgba(14, 165, 233, 0.05); }
-  .workspace-slot:hover { border-color: var(--color-neon-cyan); transform: translateY(-2px); }
-  .slot-label { font-family: var(--font-heading); font-size: 10px; font-weight: 700; letter-spacing: 1.5px; color: var(--color-text-dim); text-transform: uppercase; }
-  .slot-img { width: 100%; height: 80px; object-fit: cover; border-radius: 6px; margin: 12px 0; }
-  .slot-placeholder { font-size: 24px; opacity: 0.3; margin: 20px 0; color: var(--color-text-dim); }
-  .slot-name { font-size: 13px; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .slot-price { font-size: 12px; color: var(--color-neon-cyan); font-weight: 700; font-family: var(--font-heading); margin-top: 4px; }
-  .slot-remove { position: absolute; top: 12px; right: 12px; background: rgba(244, 63, 94, 0.1); border: 1px solid rgba(244, 63, 94, 0.2); color: var(--color-danger-red); width: 24px; height: 24px; border-radius: 50%; cursor: pointer; font-size: 10px; display: flex; align-items: center; justify-content: center; opacity: 0; transition: 0.2s; }
-  .workspace-slot:hover .slot-remove { opacity: 1; }
+    .workspace-grid {
+      display: flex; flex-direction: column; gap: 24px;
+    }
+    .workspace-slots {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .workspace-slot {
+      background: var(--bg-card); border: 1px solid var(--border-grid);
+      border-radius: var(--radius); padding: 14px 10px;
+      text-align: center; cursor: pointer;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      min-height: 140px; position: relative;
+      transition: 0.2s;
+    }
+    .workspace-slot:active { transform: scale(0.97); }
+    .workspace-slot.filled { border-color: var(--primary-blue); background: rgba(59,130,246,0.05); }
+    .slot-label {
+      font-family: var(--font-heading); font-size: 8px;
+      font-weight: 700; letter-spacing: 1px;
+      color: var(--text-dim); text-transform: uppercase;
+    }
+    .slot-img {
+      width: 100%; max-width: 80px; height: 56px;
+      object-fit: cover; border-radius: 6px; margin: 6px 0;
+    }
+    .slot-placeholder {
+      font-size: 22px; opacity: 0.2; margin: 4px 0;
+      color: var(--text-dim);
+    }
+    .slot-name {
+      font-size: 11px; font-weight: 600; color: #fff;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      max-width: 100%;
+    }
+    .slot-price {
+      font-size: 10px; color: var(--neon-orange);
+      font-weight: 700; font-family: var(--font-heading);
+    }
+    .slot-remove {
+      position: absolute; top: 6px; right: 6px;
+      background: rgba(239,68,68,0.12);
+      border: 1px solid rgba(239,68,68,0.2);
+      color: var(--danger); width: 20px; height: 20px;
+      border-radius: 50%; cursor: pointer;
+      font-size: 9px; display: flex;
+      align-items: center; justify-content: center;
+      opacity: 0.7;
+    }
+    .workspace-slot:active .slot-remove { opacity: 1; }
 
-  .workspace-metrics { background: var(--color-bg-card); border: 1px solid var(--color-border-grid); border-radius: var(--radius-futuristic); padding: 32px; display: flex; flex-direction: column; justify-content: space-between; }
-  .metric-header { font-family: var(--font-heading); font-size: 14px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 24px; border-bottom: 1px solid var(--color-border-grid); padding-bottom: 12px; }
-  .metric-row { display: flex; justify-content: space-between; margin-bottom: 20px; }
-  .metric-label { color: var(--color-text-dim); font-size: 13px; }
-  .metric-val { font-family: var(--font-heading); font-size: 20px; font-weight: 900; color: var(--color-primary-blue); }
-  .budget-bar { background: var(--color-bg-inner); height: 6px; border-radius: 99px; width: 100%; overflow: hidden; margin-bottom: 24px; }
-  .budget-fill { height: 100%; background: linear-gradient(90deg, var(--color-primary-blue), var(--color-neon-cyan)); width: 0%; transition: width 0.4s ease; }
-  .compat-alert { background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); padding: 16px; border-radius: 8px; font-size: 12px; color: var(--color-success-green); line-height: 1.5; margin-bottom: 24px; }
+    .workspace-metrics {
+      background: var(--bg-card); border: 1px solid var(--border-grid);
+      border-radius: var(--radius); padding: 20px 16px;
+    }
+    .metric-header {
+      font-family: var(--font-heading); font-size: 11px;
+      letter-spacing: 1px; text-transform: uppercase;
+      color: var(--text-dim); margin-bottom: 16px;
+      border-bottom: 1px solid var(--border-grid);
+      padding-bottom: 10px;
+    }
+    .metric-row {
+      display: flex; justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .metric-label { color: var(--text-dim); font-size: 12px; }
+    .metric-val {
+      font-family: var(--font-heading); font-size: 18px;
+      font-weight: 700; color: var(--primary-blue);
+    }
+    .budget-bar {
+      background: var(--bg-inner); height: 5px;
+      border-radius: 99px; width: 100%; overflow: hidden;
+      margin-bottom: 16px;
+    }
+    .budget-fill {
+      height: 100%; background: linear-gradient(90deg, var(--primary-blue), var(--neon-orange));
+      width: 0%; transition: width 0.4s ease;
+    }
+    .compat-alert {
+      background: rgba(34,197,94,0.05);
+      border: 1px solid rgba(34,197,94,0.1);
+      padding: 12px; border-radius: 8px;
+      font-size: 11px; color: var(--success);
+      line-height: 1.5; margin-bottom: 16px;
+    }
+    .workspace-metrics .btn-primary {
+      width: 100%; justify-content: center;
+      font-size: 11px; padding: 12px;
+    }
 
-  /* STORE SECTION */
-  .store-section { padding: 80px 5%; max-width: 1440px; margin: 0 auto; }
-  .cats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; margin-bottom: 40px; }
-  .cat-card { background: var(--color-bg-card); border: 1px solid var(--color-border-grid); border-radius: var(--radius-futuristic); padding: 16px; text-align: center; cursor: pointer; transition: 0.3s; }
-  .cat-card:hover, .cat-card.active { border-color: var(--color-primary-blue); background: #0f1226; }
-  .cat-name { font-family: var(--font-heading); font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--color-text-dim); margin-top: 8px; }
-  .cat-card.active .cat-name { color: var(--color-neon-cyan); }
+    /* ===== STORE (mobile-first) ===== */
+    .store-section {
+      padding: 40px 16px;
+      max-width: 100%;
+    }
+    .cats-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 8px; margin-bottom: 20px;
+    }
+    .cat-card {
+      background: var(--bg-card); border: 1px solid var(--border-grid);
+      border-radius: var(--radius); padding: 10px 6px;
+      text-align: center; cursor: pointer;
+      transition: 0.15s;
+    }
+    .cat-card:active { transform: scale(0.95); }
+    .cat-card.active { border-color: var(--primary-blue); background: #1a253a; }
+    .cat-card div:first-child { font-size: 20px; }
+    .cat-name {
+      font-family: var(--font-heading); font-size: 8px;
+      font-weight: 600; letter-spacing: 0.5px;
+      text-transform: uppercase; color: var(--text-dim);
+      margin-top: 4px;
+    }
+    .cat-card.active .cat-name { color: var(--neon-orange); }
 
-  /* FILTER BAR */
-  .filter-bar { background: var(--color-bg-card); border: 1px solid var(--color-border-grid); border-radius: var(--radius-futuristic); padding: 20px 24px; margin-bottom: 40px; display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
-  .filter-search { flex: 1; min-width: 200px; background: var(--color-bg-inner); border: 1px solid var(--color-border-grid); border-radius: var(--radius-futuristic); color: #fff; padding: 12px 16px; font-size: 13px; min-height: 44px; }
-  .filter-search:focus { border-color: var(--color-primary-blue); }
-  .filter-select { background: var(--color-bg-inner); border: 1px solid var(--color-border-grid); border-radius: var(--radius-futuristic); color: #fff; padding: 12px 36px 12px 16px; font-size: 13px; min-height: 44px; cursor: pointer; appearance: none; }
-  .filter-select:focus { border-color: var(--color-primary-blue); }
-  .filter-count { margin-left: auto; font-size: 13px; color: var(--color-text-dim); }
+    .filter-bar {
+      background: var(--bg-card); border: 1px solid var(--border-grid);
+      border-radius: var(--radius); padding: 12px 14px;
+      margin-bottom: 20px;
+      display: flex; flex-wrap: wrap; gap: 8px;
+      align-items: center;
+    }
+    .filter-search {
+      flex: 1 1 100%; min-width: 0;
+      background: var(--bg-inner); border: 1px solid var(--border-grid);
+      border-radius: var(--radius); color: #fff;
+      padding: 10px 14px; font-size: 13px;
+      font-family: var(--font-body); min-height: 40px;
+    }
+    .filter-search:focus { border-color: var(--primary-blue); }
+    .filter-select {
+      flex: 1 1 45%;
+      background: var(--bg-inner); border: 1px solid var(--border-grid);
+      border-radius: var(--radius); color: #fff;
+      padding: 10px 28px 10px 12px; font-size: 12px;
+      min-height: 40px; cursor: pointer; appearance: none;
+      font-family: var(--font-body);
+    }
+    .filter-select:focus { border-color: var(--primary-blue); }
 
-  /* REAL-LIFE IMAGERY PRODUCTS GRID */
-  .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
-  .product-card { background: var(--color-bg-card); border: 1px solid var(--color-border-grid); border-radius: var(--radius-futuristic); overflow: hidden; transition: 0.3s; cursor: pointer; display: flex; flex-direction: column; justify-content: space-between; }
-  .product-card:hover { border-color: var(--color-primary-blue); transform: translateY(-4px); box-shadow: 0 15px 30px rgba(14, 165, 233, 0.15); }
-  .product-img-container { width: 100%; height: 200px; overflow: hidden; background: #060914; position: relative; }
-  .product-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
-  .product-card:hover .product-img { transform: scale(1.08); }
-  .product-badge { position: absolute; top: 12px; left: 12px; background: var(--color-primary-blue); color: #fff; font-family: var(--font-heading); font-size: 8px; font-weight: 700; letter-spacing: 1px; padding: 6px 10px; border-radius: 4px; text-transform: uppercase; }
-  
-  .product-info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
-  .product-brand { font-family: var(--font-heading); font-size: 10px; font-weight: 700; letter-spacing: 2px; color: var(--color-neon-cyan); text-transform: uppercase; margin-bottom: 6px; }
-  .product-name { font-size: 16px; font-weight: 700; color: #fff; line-height: 1.4; margin-bottom: 8px; }
-  .product-specs { font-size: 12px; color: var(--color-text-dim); line-height: 1.5; margin-bottom: 16px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 36px; }
-  .product-stars { color: #eab308; font-size: 12px; margin-bottom: 12px; }
-  .product-price { font-family: var(--font-heading); font-size: 22px; font-weight: 900; color: var(--color-primary-blue); margin-bottom: 16px; }
-  
-  .product-footer { display: flex; align-items: center; gap: 8px; }
-  .qty-control { display: flex; align-items: center; border: 1px solid var(--color-border-grid); border-radius: 8px; overflow: hidden; background: var(--color-bg-inner); }
-  .qty-btn { background: none; border: none; color: #fff; width: 32px; height: 36px; cursor: pointer; font-size: 16px; font-weight: 700; }
-  .qty-btn:hover { background: var(--color-border-grid); }
-  .qty-num { width: 32px; text-align: center; font-size: 13px; font-weight: 700; }
-  .add-btn { flex: 1; background: var(--color-border-grid); border: 1px solid rgba(14, 165, 233, 0.3); color: #fff; border-radius: 8px; padding: 10px; font-family: var(--font-heading); font-size: 10px; font-weight: 700; letter-spacing: 1px; cursor: pointer; transition: 0.2s; min-height: 36px; text-transform: uppercase; }
-  .add-btn:hover { background: var(--color-primary-blue); border-color: var(--color-primary-blue); }
-  .add-btn.added { background: var(--color-success-green); border-color: var(--color-success-green); }
+    .products-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .product-card {
+      background: var(--bg-card); border: 1px solid var(--border-grid);
+      border-radius: var(--radius); overflow: hidden;
+      transition: 0.15s; cursor: pointer;
+      display: flex; flex-direction: column;
+    }
+    .product-card:active { transform: scale(0.98); }
+    .product-img-container {
+      width: 100%; height: 120px; overflow: hidden;
+      background: #0b111e; position: relative;
+    }
+    .product-img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    .product-badge {
+      position: absolute; top: 6px; left: 6px;
+      background: var(--primary-blue); color: #fff;
+      font-family: var(--font-heading); font-size: 7px;
+      font-weight: 700; letter-spacing: 0.5px;
+      padding: 3px 8px; border-radius: 4px;
+      text-transform: uppercase;
+    }
+    .product-info {
+      padding: 12px 10px;
+      display: flex; flex-direction: column; flex:1;
+    }
+    .product-brand {
+      font-family: var(--font-heading); font-size: 8px;
+      font-weight: 700; letter-spacing: 1px;
+      color: var(--neon-orange); text-transform: uppercase;
+    }
+    .product-name {
+      font-size: 13px; font-weight: 600; color: #fff;
+      line-height: 1.3; margin: 2px 0 4px;
+    }
+    .product-specs {
+      font-size: 10px; color: var(--text-dim);
+      line-height: 1.4; margin-bottom: 8px;
+      display: -webkit-box; -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical; overflow: hidden;
+      height: 28px;
+    }
+    .product-stars { color: #fbbf24; font-size: 10px; margin-bottom: 4px; }
+    .product-price {
+      font-family: var(--font-heading); font-size: 16px;
+      font-weight: 700; color: var(--primary-blue);
+      margin-bottom: 8px;
+    }
+    .product-footer {
+      display: flex; align-items: center; gap: 4px;
+      flex-wrap: wrap;
+    }
+    .qty-control {
+      display: flex; align-items: center;
+      border: 1px solid var(--border-grid);
+      border-radius: 6px; overflow: hidden;
+      background: var(--bg-inner);
+    }
+    .qty-btn {
+      background: none; border: none; color: #fff;
+      width: 26px; height: 28px; cursor: pointer;
+      font-size: 14px; font-weight: 700;
+    }
+    .qty-btn:active { background: var(--border-grid); }
+    .qty-num {
+      width: 24px; text-align: center; font-size: 12px;
+      font-weight: 600;
+    }
+    .add-btn {
+      flex: 1; min-width: 44px;
+      background: var(--bg-inner);
+      border: 1px solid rgba(59,130,246,0.15);
+      color: #fff; border-radius: 6px;
+      padding: 6px 4px;
+      font-family: var(--font-heading); font-size: 8px;
+      font-weight: 700; letter-spacing: 0.5px;
+      cursor: pointer; transition: 0.15s;
+      text-transform: uppercase; min-height: 28px;
+    }
+    .add-btn:active { background: var(--primary-blue); }
 
-  /* OVERLAYS & MODALS */
-  .modal-overlay { position: fixed; inset: 0; background: rgba(3, 6, 17, 0.85); backdrop-filter: blur(10px); z-index: 3000; display: none; align-items: center; justify-content: center; padding: 24px; }
-  .modal-overlay.open { display: flex; }
-  .modal { background: var(--color-bg-card); border: 1px solid var(--color-border-grid); border-radius: var(--radius-futuristic); width: 100%; max-width: 460px; padding: 32px; }
-  .modal h2 { font-family: var(--font-heading); font-size: 22px; margin-bottom: 8px; }
-  .modal p { color: var(--color-text-dim); font-size: 13px; line-height: 1.6; margin-bottom: 24px; }
-  
-  .form-group { margin-bottom: 16px; }
-  .form-label { font-family: var(--font-heading); font-size: 10px; letter-spacing: 1px; color: var(--color-text-dim); margin-bottom: 8px; display: block; }
-  .form-input { width: 100%; background: var(--color-bg-inner); border: 1px solid var(--color-border-grid); border-radius: var(--radius-futuristic); color: #fff; padding: 12px 16px; font-size: 14px; }
-  .form-input:focus { border-color: var(--color-primary-blue); }
-  .modal-btns { display: flex; gap: 12px; margin-top: 24px; }
-  .modal-cancel { flex: 1; background: transparent; border: 1px solid var(--color-border-grid); color: var(--color-text-dim); border-radius: var(--radius-futuristic); padding: 12px; font-family: var(--font-heading); font-size: 11px; cursor: pointer; }
-  .modal-cancel:hover { border-color: var(--color-danger-red); color: var(--color-danger-red); }
-  .modal-confirm { flex: 2; background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff; border: none; border-radius: var(--radius-futuristic); padding: 12px; font-family: var(--font-heading); font-size: 11px; font-weight: 700; cursor: pointer; }
+    /* ===== MODALS (mobile-first) ===== */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(10,14,26,0.85);
+      backdrop-filter: blur(8px);
+      z-index: 3000; display: none;
+      align-items: center; justify-content: center;
+      padding: 16px; overflow-y: auto;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--bg-card); border: 1px solid var(--border-grid);
+      border-radius: var(--radius); width: 100%;
+      max-width: 440px; padding: 24px 20px; margin: auto;
+    }
+    .modal h2 { font-family: var(--font-heading); font-size: 20px; }
+    .modal p { color: var(--text-dim); font-size: 13px; line-height: 1.5; margin-bottom: 16px; }
+    .form-group { margin-bottom: 14px; }
+    .form-label {
+      font-family: var(--font-heading); font-size: 10px;
+      letter-spacing: 0.5px; color: var(--text-dim);
+      display: block; margin-bottom: 4px;
+    }
+    .form-input {
+      width: 100%; background: var(--bg-inner);
+      border: 1px solid var(--border-grid); border-radius: var(--radius);
+      color: #fff; padding: 10px 14px; font-size: 14px;
+      font-family: var(--font-body);
+    }
+    .form-input:focus { border-color: var(--primary-blue); }
+    .modal-btns {
+      display: flex; gap: 10px; margin-top: 16px;
+    }
+    .modal-cancel, .modal-confirm {
+      padding: 10px; border-radius: var(--radius);
+      font-family: var(--font-heading); font-size: 11px;
+      font-weight: 700; cursor: pointer; border: none;
+      flex: 1; text-align: center;
+    }
+    .modal-cancel {
+      background: transparent; border: 1px solid var(--border-grid);
+      color: var(--text-dim);
+    }
+    .modal-cancel:active { border-color: var(--danger); color: var(--danger); }
+    .modal-confirm {
+      background: linear-gradient(135deg, var(--primary-blue), #2563eb);
+      color: #fff;
+    }
+    .modal-confirm:active { opacity: 0.8; }
 
-  /* PRODUCT DETAILS MODAL */
-  .product-modal { max-width: 700px; }
-  .pm-top { display: flex; gap: 24px; margin-bottom: 24px; flex-wrap: wrap; }
-  .pm-img-container { width: 220px; height: 220px; border-radius: var(--radius-futuristic); overflow: hidden; border: 1px solid var(--color-border-grid); }
-  .pm-img { width: 100%; height: 100%; object-fit: cover; }
-  .pm-info { flex: 1; min-width: 200px; }
-  .pm-brand { font-family: var(--font-heading); font-size: 10px; color: var(--color-neon-cyan); letter-spacing: 2px; margin-bottom: 4px; }
-  .pm-name { font-family: var(--font-heading); font-size: 22px; font-weight: 900; color: #fff; margin-bottom: 8px; }
-  .pm-price { font-family: var(--font-heading); font-size: 26px; font-weight: 900; color: var(--color-primary-blue); margin-bottom: 12px; }
-  .pm-specs { font-size: 14px; color: var(--color-text-dim); line-height: 1.6; margin-bottom: 20px; }
-  .pm-action-row { display: flex; gap: 12px; }
-  .pm-add { flex: 2; }
-  .pm-pin { flex: 1; background: transparent; border: 1px solid var(--color-neon-cyan); color: var(--color-neon-cyan); border-radius: var(--radius-futuristic); padding: 14px; font-family: var(--font-heading); font-size: 11px; cursor: pointer; }
-  .pm-pin:hover { background: rgba(6, 182, 212, 0.08); }
+    /* ===== CART DRAWER ===== */
+    .cart-drawer {
+      position: fixed; right:0; top:0; bottom:0;
+      width: 100%; max-width: 380px;
+      background: var(--bg-card); border-left: 1px solid var(--border-grid);
+      z-index: 3001; display: flex; flex-direction: column;
+      transform: translateX(100%);
+      transition: 0.35s cubic-bezier(0.16,1,0.3,1);
+    }
+    .cart-drawer.open { transform: translateX(0); }
+    .drawer-header {
+      padding: 16px 20px; border-bottom: 1px solid var(--border-grid);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .drawer-title {
+      font-family: var(--font-heading); font-size: 16px;
+      letter-spacing: 0.5px;
+    }
+    .drawer-close {
+      background: var(--bg-inner); border: 1px solid var(--border-grid);
+      color: #fff; width: 32px; height: 32px;
+      border-radius: 8px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .drawer-close:active { border-color: var(--danger); color: var(--danger); }
+    .cart-items {
+      flex: 1; overflow-y: auto; padding: 16px;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .cart-item {
+      background: var(--bg-inner); border: 1px solid var(--border-grid);
+      border-radius: var(--radius); padding: 12px;
+      display: flex; gap: 12px;
+    }
+    .cart-item-img {
+      width: 50px; height: 50px; object-fit: cover;
+      border-radius: 6px; flex-shrink: 0;
+    }
+    .cart-item-info { flex:1; }
+    .cart-item-name {
+      font-size: 13px; font-weight: 600; color: #fff;
+    }
+    .cart-item-brand {
+      font-size: 9px; color: var(--text-dim);
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .cart-item-price {
+      font-family: var(--font-heading); font-size: 14px;
+      font-weight: 700; color: var(--neon-orange);
+    }
+    .cart-item-row {
+      display: flex; align-items: center;
+      justify-content: space-between; gap: 8px;
+      margin-top: 6px;
+    }
+    .cart-qty-wrap {
+      display: flex; align-items: center; gap: 4px;
+    }
+    .cart-qty-btn {
+      background: transparent; border: 1px solid var(--border-grid);
+      border-radius: 4px; color: #fff; width: 22px; height: 22px;
+      cursor: pointer; font-size: 12px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .cart-qty-btn:active { background: var(--primary-blue); }
+    .cart-qty-num {
+      font-size: 12px; font-weight: 600; min-width: 20px;
+      text-align: center;
+    }
+    .cart-item-remove {
+      background: transparent; border: 1px solid var(--border-grid);
+      color: var(--text-dim); border-radius: 4px;
+      padding: 2px 8px; font-size: 10px; cursor: pointer;
+    }
+    .cart-item-remove:active { border-color: var(--danger); color: var(--danger); }
+    .cart-empty {
+      flex:1; display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      color:var(--text-dim); padding:40px 0;
+    }
+    .cart-empty div { font-size: 40px; opacity:0.3; }
+    .cart-footer {
+      padding: 16px 20px; border-top: 1px solid var(--border-grid);
+    }
+    .cart-total-row {
+      display: flex; justify-content: space-between;
+      align-items: center; margin-bottom: 16px;
+    }
+    .cart-total-label { color: var(--text-dim); font-size: 13px; }
+    .cart-total-val {
+      font-family: var(--font-heading); font-size: 22px;
+      font-weight: 700; color: #fff;
+    }
+    .wa-btn {
+      width: 100%; background: linear-gradient(135deg, var(--neon-orange), #ea580c);
+      color: #fff; border: none; border-radius: var(--radius);
+      padding: 12px; font-family: var(--font-heading);
+      font-size: 11px; font-weight: 700; cursor: pointer;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .wa-btn:active { transform: scale(0.98); }
+    .clear-btn {
+      width: 100%; background: transparent;
+      border: 1px solid var(--border-grid); color: var(--text-dim);
+      border-radius: var(--radius); padding: 10px;
+      font-family: var(--font-heading); font-size: 10px;
+      cursor: pointer; margin-top: 8px;
+    }
+    .clear-btn:active { border-color: var(--danger); color: var(--danger); }
 
-  /* CART DRAWER */
-  .cart-drawer { position: fixed; right: 0; top: 0; bottom: 0; width: min(460px, 100vw); background: var(--color-bg-card); border-left: 1px solid var(--color-border-grid); z-index: 3001; display: flex; flex-direction: column; transform: translateX(100%); transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-  .cart-drawer.open { transform: translateX(0); }
-  .drawer-header { padding: 24px; border-bottom: 1px solid var(--color-border-grid); display: flex; align-items: center; justify-content: space-between; }
-  .drawer-title { font-family: var(--font-heading); font-size: 18px; letter-spacing: 1px; }
-  .drawer-close { background: var(--color-bg-inner); border: 1px solid var(--color-border-grid); color: #fff; width: 36px; height: 36px; border-radius: 8px; cursor: pointer; transition: 0.2s; }
-  .drawer-close:hover { border-color: var(--color-danger-red); color: var(--color-danger-red); }
-  .cart-items { flex: 1; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 16px; }
-  .cart-item { background: var(--color-bg-inner); border: 1px solid var(--color-border-grid); border-radius: var(--radius-futuristic); padding: 16px; display: flex; gap: 16px; }
-  .cart-item-img { width: 70px; height: 70px; object-fit: cover; border-radius: 8px; }
-  .cart-item-info { flex: 1; }
-  .cart-item-name { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 4px; }
-  .cart-item-brand { font-size: 11px; color: var(--color-text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
-  .cart-item-price { font-family: var(--font-heading); font-size: 15px; font-weight: 700; color: var(--color-neon-cyan); }
-  .cart-item-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 8px; }
-  .cart-qty-wrap { display: flex; align-items: center; gap: 8px; }
-  .cart-qty-btn {
-    background: transparent; border: 1px solid var(--color-border-grid); border-radius: 6px; color: #fff;
-    width: 26px; height: 26px; cursor: pointer; font-size: 14px; font-weight: 700;
-    display: flex; align-items: center; justify-content: center; transition: 0.15s;
-  }
-  .cart-qty-btn:hover { background: var(--color-primary-blue); border-color: var(--color-primary-blue); }
-  .cart-qty-num { font-size: 13px; font-weight: 700; min-width: 24px; text-align: center; }
-  .cart-item-remove { background: transparent; border: 1px solid var(--color-border-grid); color: var(--color-text-dim); border-radius: 6px; cursor: pointer; padding: 5px 10px; font-size: 11px; transition: 0.2s; }
-  .cart-item-remove:hover { border-color: var(--color-danger-red); color: var(--color-danger-red); }
-  .cart-empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--color-text-dim); padding: 60px 0; }
-  .cart-empty div { font-size: 48px; opacity: 0.4; margin-bottom: 12px; }
-  .cart-footer { padding: 24px; border-top: 1px solid var(--color-border-grid); }
-  .cart-total-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-  .cart-total-label { color: var(--color-text-dim); font-size: 13px; }
-  .cart-total-val { font-family: var(--font-heading); font-size: 26px; font-weight: 900; color: #fff; }
-  .wa-btn { width: 100%; background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff; border: none; border-radius: var(--radius-futuristic); padding: 16px; font-family: var(--font-heading); font-size: 13px; font-weight: 700; cursor: pointer; min-height: 48px; transition: 0.2s; }
-  .wa-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(34, 197, 94, 0.3); }
-  .clear-btn { width: 100%; background: transparent; border: 1px solid var(--color-border-grid); color: var(--color-text-dim); border-radius: var(--radius-futuristic); padding: 12px; font-family: var(--font-heading); font-size: 12px; cursor: pointer; margin-top: 10px; transition: 0.2s; }
-  .clear-btn:hover { border-color: var(--color-danger-red); color: var(--color-danger-red); }
+    /* ===== TOAST ===== */
+    .toast {
+      position: fixed; bottom: 20px; left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--primary-blue); color: #fff;
+      padding: 12px 24px; border-radius: 40px;
+      font-family: var(--font-heading); font-weight: 700;
+      font-size: 12px; opacity:0; transition:0.3s ease;
+      z-index:9999; box-shadow:0 0 24px var(--primary-glow);
+      pointer-events:none; white-space: nowrap;
+      max-width: 90vw; overflow: hidden; text-overflow: ellipsis;
+    }
+    .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
 
-  /* SYSTEM TOAST ALERTS */
-  .toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--color-primary-blue); color: #fff; padding: 12px 24px; border-radius: 99px; font-family: var(--font-heading); font-size: 11px; font-weight: 700; letter-spacing: 1px; z-index: 5000; opacity: 0; transition: 0.3s ease; pointer-events: none; box-shadow: 0 8px 24px var(--color-blue-glow); }
-  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    /* ===== FOOTER ===== */
+    footer {
+      background: #070b14; border-top: 1px solid var(--border-grid);
+      padding: 40px 16px 24px;
+    }
+    .footer-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 24px 16px;
+      max-width: 100%;
+    }
+    .footer-brand .logo {
+      font-family: var(--font-heading); font-size: 18px;
+      font-weight: 900; margin-bottom: 8px;
+    }
+    .footer-brand .logo span { color: var(--neon-orange); }
+    .footer-brand p { font-size: 12px; color: var(--text-dim); line-height: 1.5; }
+    .footer-col h4 {
+      font-family: var(--font-heading); font-size: 10px;
+      letter-spacing: 1px; text-transform: uppercase;
+      color: var(--text-dim); margin-bottom: 12px;
+    }
+    .footer-col a {
+      display: block; color: var(--text-dim); font-size: 12px;
+      text-decoration: none; margin-bottom: 6px; cursor: pointer;
+    }
+    .footer-col a:active { color: var(--neon-orange); }
 
-  /* FOOTER */
-  footer { background: #010207; border-top: 1px solid var(--color-border-grid); padding: 80px 5% 40px; }
-  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; max-width: 1440px; margin: 0 auto 60px; }
-  .footer-brand .logo { font-family: var(--font-heading); font-size: 22px; font-weight: 900; margin-bottom: 16px; }
-  .footer-brand .logo span { color: var(--color-primary-blue); }
-  .footer-col h4 { font-family: var(--font-heading); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--color-text-dim); margin-bottom: 24px; }
-  .footer-col a { display: block; color: var(--color-text-dim); font-size: 13px; text-decoration: none; margin-bottom: 12px; cursor: pointer; transition: 0.2s; }
-  .footer-col a:hover { color: var(--color-neon-cyan); }
+    /* ===== PRODUCT MODAL (mobile) ===== */
+    .product-modal { max-width: 100%; }
+    .pm-top {
+      display: flex; flex-direction: column; gap: 16px;
+      margin-bottom: 16px;
+    }
+    .pm-img-container {
+      width: 100%; height: 180px; border-radius: var(--radius);
+      overflow: hidden; border: 1px solid var(--border-grid);
+    }
+    .pm-img { width:100%; height:100%; object-fit:cover; }
+    .pm-info { flex:1; }
+    .pm-brand {
+      font-family: var(--font-heading); font-size: 10px;
+      color: var(--neon-orange); letter-spacing: 1px;
+    }
+    .pm-name {
+      font-family: var(--font-heading); font-size: 18px;
+      font-weight: 700; color: #fff;
+    }
+    .pm-price {
+      font-family: var(--font-heading); font-size: 22px;
+      font-weight: 700; color: var(--primary-blue);
+    }
+    .pm-specs { font-size: 13px; color: var(--text-dim); line-height: 1.5; }
+    .pm-action-row {
+      display: flex; gap: 10px; flex-wrap: wrap;
+    }
+    .pm-add { flex: 2; }
+    .pm-pin {
+      flex: 1; background: transparent;
+      border: 1px solid var(--neon-orange); color: var(--neon-orange);
+      border-radius: var(--radius); padding: 10px;
+      font-family: var(--font-heading); font-size: 10px;
+      font-weight: 700; cursor: pointer;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .pm-pin:active { background: rgba(249,115,22,0.06); }
 
-  @media(max-width:992px) {
-    .workspace-grid { grid-template-columns: 1fr; }
-    .hero { grid-template-columns: 1fr; gap: 40px; text-align: center; padding-top: 40px;}
-    .hero-img-frame { margin: 0 auto; }
-    .hero-btns { justify-content: center; }
-  }
-  @media(max-width:768px) {
-    .nav-links, .search-wrap { display: none; }
-    .hamburger { display: flex; }
-    .products-grid { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
-    .footer-grid { grid-template-columns: 1fr 1fr; }
-    .pm-top { flex-direction: column; }
-    .pm-img-container { width: 100%; height: 240px; }
-    .workspace-metrics { padding: 24px; }
-  }
-  @media(max-width:480px) {
-    .hero-img-frame { height: 360px; }
-    .workspace-slots { grid-template-columns: 1fr 1fr; }
-  }
-</style>
+    /* ===== CHECKOUT MODAL ===== */
+    .checkout-summary {
+      background: var(--bg-inner); border: 1px solid var(--border-grid);
+      border-radius: var(--radius); padding: 12px;
+      margin-bottom: 12px; max-height: 120px; overflow-y: auto;
+    }
+    .checkout-item {
+      display: flex; justify-content: space-between;
+      padding: 4px 0; font-size: 11px; color: var(--text-dim);
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+    .checkout-total-row {
+      display: flex; justify-content: space-between;
+      font-size: 14px; font-weight: 700; margin-top: 8px;
+      padding-top: 8px; border-top: 1px solid var(--border-grid);
+      color: #fff;
+    }
+    .deposit-highlight {
+      background: rgba(59,130,246,0.05);
+      border: 1px dashed var(--primary-blue);
+      border-radius: var(--radius); padding: 16px;
+      text-align: center; margin: 16px 0;
+    }
+    .deposit-amount {
+      font-family: var(--font-heading); font-size: 24px;
+      font-weight: 700; color: var(--primary-blue);
+    }
+    .preorder-badge {
+      display: inline-block; background: rgba(249,115,22,0.12);
+      border: 1px solid var(--neon-orange); color: var(--neon-orange);
+      padding: 2px 8px; border-radius: 4px;
+      font-family: var(--font-heading); font-size: 10px;
+      margin-left: 6px; vertical-align: middle;
+    }
+
+    /* ===== DRAWER OVERLAY ===== */
+    .drawer-overlay {
+      position: fixed; inset: 0;
+      background: rgba(10,14,26,0.6);
+      z-index: 2500; opacity:0; pointer-events:none;
+      transition: opacity 0.3s;
+    }
+    .drawer-overlay.open { opacity:1; pointer-events:all; }
+
+    /* ===== TABLET / DESKTOP TWEAKS ===== */
+    @media (min-width: 600px) {
+      .workspace-slots { grid-template-columns: repeat(3, 1fr); }
+      .products-grid { grid-template-columns: repeat(3, 1fr); }
+      .cats-grid { grid-template-columns: repeat(6, 1fr); }
+      .hero-img-frame { height: 300px; }
+    }
+    @media (min-width: 900px) {
+      .hero { flex-direction: row; padding: 40px 5%; min-height: 80vh; }
+      .hero-content { flex: 1; }
+      .hero-visual { flex: 1; }
+      .hero-img-frame { height: 380px; }
+      .workspace-grid { flex-direction: row; }
+      .workspace-slots { grid-template-columns: repeat(3, 1fr); flex: 2; }
+      .workspace-metrics { flex: 1; }
+      .products-grid { grid-template-columns: repeat(4, 1fr); }
+      .cats-grid { grid-template-columns: repeat(8, 1fr); }
+      .filter-bar { flex-wrap: nowrap; }
+      .filter-search { flex: 1; }
+      .filter-select { flex: 0 1 auto; }
+      .nav-search { display: block; }
+      .nav-links { display: flex; }
+      .hamburger { display: none; }
+      .user-name { display: inline; }
+      .footer-grid { grid-template-columns: 2fr 1fr 1fr 1fr; }
+      .modal { max-width: 520px; }
+      .pm-top { flex-direction: row; }
+      .pm-img-container { width: 200px; height: 200px; }
+    }
+    @media (min-width: 1200px) {
+      .hero-img-frame { height: 460px; }
+      .products-grid { grid-template-columns: repeat(4, 1fr); }
+      .workspace-slots { grid-template-columns: repeat(4, 1fr); }
+    }
+  </style>
 </head>
 <body>
 
-<!-- CUSTOM ALERTS & MODALS -->
-<div class="modal-overlay" id="customAlert">
-  <div class="modal" style="text-align:center;">
-    <h2 id="alertTitle" style="font-family:var(--font-heading);">System Diagnostic</h2>
-    <p id="alertBody" style="margin-top:12px;"></p>
-    <button class="btn-primary" style="width:100%; justify-content:center;" onclick="closeCustomAlert()">System Acknowledge</button>
-  </div>
-</div>
+<!-- ===== ALERTS ===== -->
+<div class="modal-overlay" id="customAlert"><div class="modal" style="text-align:center;"><h2 id="alertTitle">System</h2><p id="alertBody"></p><button class="btn-primary" style="width:100%;justify-content:center;" onclick="closeCustomAlert()">Acknowledge</button></div></div>
+<div class="modal-overlay" id="customConfirm"><div class="modal" style="text-align:center;"><h2 id="confirmTitle">Confirm</h2><p id="confirmBody"></p><div style="display:flex;gap:10px;"><button class="modal-cancel" style="width:100%;" id="confirmCancelBtn">Cancel</button><button class="btn-primary" style="width:100%;justify-content:center;background:var(--danger)!important;" id="confirmOkBtn">Execute</button></div></div></div>
 
-<div class="modal-overlay" id="customConfirm">
-  <div class="modal" style="text-align:center;">
-    <h2 id="confirmTitle" style="font-family:var(--font-heading);">Workspace Check</h2>
-    <p id="confirmBody" style="margin-top:12px;"></p>
-    <div style="display:flex; gap:12px;">
-      <button class="modal-cancel" style="width:100%;" id="confirmCancelBtn">Abort</button>
-      <button class="btn-primary" style="width:100%; justify-content:center; background:var(--color-danger-red) !important;" id="confirmOkBtn">Execute</button>
-    </div>
-  </div>
-</div>
-
-<!-- NAVIGATION SECTION -->
+<!-- ===== NAV ===== -->
 <nav id="navbar">
   <div class="nav-logo" onclick="scrollToTop()">ELECTRO<span>HUB</span></div>
   <div class="nav-links">
-    <a onclick="filterByCategory('all')">All Hardware</a>
-    <a onclick="filterByCategory('Laptop')">Laptops</a>
-    <a onclick="filterByCategory('Monitor')">Monitors</a>
-    <a onclick="filterByCategory('Keyboard')">Keyboards</a>
-    <a onclick="filterByCategory('Mouse')">Mice</a>
-    <a onclick="filterByCategory('GPU')">GPUs</a>
-    <a onclick="filterByCategory('CPU')">Components</a>
+    <a onclick="filterByCategory('all')">All</a><a onclick="filterByCategory('Laptop')">Laptops</a><a onclick="filterByCategory('Monitor')">Monitors</a>
+    <a onclick="filterByCategory('Keyboard')">Keyboards</a><a onclick="filterByCategory('Mouse')">Mice</a><a onclick="filterByCategory('GPU')">GPUs</a><a onclick="filterByCategory('CPU')">Components</a>
   </div>
   <div class="nav-right">
-    <div class="search-wrap">
-      <span class="search-icon">🔍</span>
-      <input class="nav-search" type="text" placeholder="Search workstation gear..." oninput="handleSearch(this.value)">
+    <div class="search-wrap" style="display:none;"><span class="search-icon">🔍</span><input class="nav-search" type="text" placeholder="Search..." oninput="handleSearch(this.value)"></div>
+    <button class="cart-btn" onclick="openCart()">🛒 <span class="cart-count" id="cartCount">0</span></button>
+    <div id="authSectionNav" style="display:flex;gap:4px;">
+      <button class="auth-btn" onclick="openAuth('login')">Login</button>
+      <button class="auth-btn primary" onclick="openAuth('register')">Register</button>
     </div>
-    <button class="cart-btn" onclick="openCart()">
-      🛒 <span class="cart-count" id="cartCount">0</span>
-    </button>
-    <div class="hamburger" onclick="toggleMobileMenu()">
-      <span></span><span></span><span></span>
+    <div class="user-nav" id="userSection" style="display:none;">
+      <div class="user-avatar" id="userAvatar">U</div>
+      <span class="user-name" id="userNameDisplay">User</span>
+      <button class="logout-btn" onclick="event.stopPropagation();logoutUser()">Logout</button>
     </div>
+    <div class="hamburger" onclick="toggleMobileMenu()"><span></span><span></span><span></span></div>
   </div>
 </nav>
 
-<!-- MOBILE NAVIGATION LINKS -->
+<!-- ===== MOBILE MENU ===== -->
 <div class="mobile-menu" id="mobileMenu">
-  <a onclick="filterByCategory('all');closeMobileMenu()">All Hardware</a>
+  <a onclick="filterByCategory('all');closeMobileMenu()">All</a>
   <a onclick="filterByCategory('Laptop');closeMobileMenu()">💻 Laptops</a>
   <a onclick="filterByCategory('Monitor');closeMobileMenu()">🖥️ Monitors</a>
   <a onclick="filterByCategory('Keyboard');closeMobileMenu()">⌨️ Keyboards</a>
   <a onclick="filterByCategory('Mouse');closeMobileMenu()">🖱️ Mice</a>
   <a onclick="filterByCategory('GPU');closeMobileMenu()">🎮 GPUs</a>
   <a onclick="filterByCategory('CPU');closeMobileMenu()">⚡ Components</a>
-  <a onclick="openCart();closeMobileMenu()" style="color:var(--color-neon-cyan);">🛒 Open Workspace Cart</a>
+  <a onclick="openCart();closeMobileMenu()" style="color:var(--neon-orange);">🛒 Cart</a>
 </div>
 
-<!-- REAL-LIFE HERO SECTION -->
+<!-- ===== HERO ===== -->
 <div class="hero">
   <div class="hero-bg-layer"></div>
   <div class="hero-content">
-    <div class="hero-banner-title">Accra Ghana Custom Configurator</div>
-    <h1>Assemble your<br><em>dream setup</em><br>today.</h1>
-    <p>Lock in elite-tier mechanical components, modular workstation setups, and hardware diagnostics with direct order dispatch to WhatsApp.</p>
+    <div class="hero-banner-title">Accra · Custom Builds</div>
+    <h1>Forge your <em>ultimate</em><br>workstation.</h1>
+    <p>Premium components, real‑time configurator, and direct WhatsApp ordering.</p>
     <div class="hero-btns">
-      <button class="btn-primary" onclick="document.getElementById('shopSection').scrollIntoView({behavior:'smooth'})">Explore Components</button>
-      <button class="btn-outline" onclick="openWhatsApp('')">💬 Direct Inquiries</button>
+      <button class="btn-primary" onclick="document.getElementById('shopSection').scrollIntoView({behavior:'smooth'})">Explore</button>
+      <button class="btn-outline" onclick="openWhatsApp('')">💬 Inquiries</button>
     </div>
   </div>
-
   <div class="hero-visual">
     <div class="hero-img-frame">
-      <!-- High End Real-Life Custom PC Setup -->
-      <img src="https://images.unsplash.com/photo-1593640408182-31c70c8268f5?q=80&w=1000&auto=format&fit=crop" alt="High End Workstation" loading="lazy">
+      <img src="https://images.unsplash.com/photo-1593640408182-31c70c8268f5?q=80&w=600&auto=format&fit=crop" alt="Workstation" loading="lazy">
       <div class="hero-img-overlay">
-        <div>
-          <div class="overlay-tag">Featured Build</div>
-          <h3 style="font-family:var(--font-heading); color:#fff; font-size:18px; margin-top:8px;">Project Obsidian</h3>
-        </div>
-        <button class="btn-outline" style="min-height:36px; padding: 10px 16px; font-size:10px; border-color:var(--color-neon-cyan); color:var(--color-neon-cyan);">View Specs</button>
+        <div><div class="overlay-tag">Featured</div><h3>Project Aether</h3></div>
+        <button class="btn-outline" style="min-height:32px;padding:4px 12px;font-size:9px;border-color:var(--neon-orange);color:var(--neon-orange);">View</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- REAL-TIME INTERACTIVE CONFIGURATOR WORKSPACE -->
+<!-- ===== WORKSPACE ===== -->
 <div class="workspace-section">
-  <div class="section-header" style="max-width:1440px; margin:0 auto 40px; padding: 0 5%;">
-    <div>
-      <div class="section-label">⚡ System Integration</div>
-      <h2 class="section-title">Dream Rig Assembler</h2>
-      <p style="color:var(--color-text-dim); margin-top:12px;">Add parts to structural templates to keep tabs on overall power loads, compatibility, and custom pricing metrics.</p>
-    </div>
-    <button class="btn-outline" onclick="resetWorkspace()" style="min-height:40px; padding:8px 16px;">🔄 Hard System Reboot</button>
+  <div class="section-header">
+    <div><div class="section-label">⚡ System Assembler</div><h2 class="section-title">Dream Rig Builder</h2><div class="section-sub">Pin components to slots.</div></div>
+    <button class="btn-outline" onclick="resetWorkspace()" style="padding:6px 14px;font-size:9px;min-height:32px;">🔄 Reboot</button>
   </div>
-
-  <div class="workspace-grid" style="max-width:1440px; margin:0 auto; padding: 0 5%;">
-    <div class="workspace-slots" id="workspaceSlots">
-      <!-- Dyn Generated Slots -->
-    </div>
-
+  <div class="workspace-grid">
+    <div class="workspace-slots" id="workspaceSlots"></div>
     <div class="workspace-metrics">
-      <div>
-        <h3 class="metric-header">System Metrics Panel</h3>
-        <div class="metric-row"><span class="metric-label">Power Draw Index</span><span class="metric-val" id="metricTdp">0W</span></div>
-        <div class="metric-row"><span class="metric-label">Configuration Value</span><span class="metric-val" id="metricBudget">GH₵0</span></div>
-        <div class="budget-bar"><div class="budget-fill" id="budgetFill"></div></div>
-        <div class="compat-alert" id="compatAlert">
-          <span>Empty system modules detected. Lock down items to begin hardware synching.</span>
-        </div>
-      </div>
-      <button class="btn-primary" style="width:100%; justify-content:center;" onclick="addWorkspaceToCart()">🛒 Transfer Assembler to Cart</button>
+      <div><h3 class="metric-header">Metrics</h3><div class="metric-row"><span class="metric-label">Power</span><span class="metric-val" id="metricTdp">0W</span></div><div class="metric-row"><span class="metric-label">Value</span><span class="metric-val" id="metricBudget">GH₵0</span></div><div class="budget-bar"><div class="budget-fill" id="budgetFill"></div></div><div class="compat-alert" id="compatAlert"><span>No components pinned.</span></div></div>
+      <button class="btn-primary" onclick="addWorkspaceToCart()">🛒 Transfer to Cart</button>
     </div>
   </div>
 </div>
 
-<!-- STORE & HARDWARE DISCOVERY SECTION -->
+<!-- ===== STORE ===== -->
 <div class="store-section" id="shopSection">
-  <div class="section-header">
-    <div>
-      <div class="section-label">Workstation Database</div>
-      <h2 class="section-title">Hardware Catalog</h2>
-    </div>
-  </div>
-
-  <!-- Component Category Grid -->
+  <div class="section-header"><div><div class="section-label">Catalog</div><h2 class="section-title">Hardware Database</h2></div></div>
   <div class="cats-grid" id="catsGrid"></div>
-
-  <!-- Dynamic System Filter Controls -->
   <div class="filter-bar">
-    <input class="filter-search" type="text" placeholder="🔍 Model, specifications, features search..." oninput="handleSearch(this.value)" id="filterSearch">
+    <input class="filter-search" type="text" placeholder="🔍 Search..." oninput="handleSearch(this.value)" id="filterSearch">
     <select class="filter-select" onchange="handleBrandFilter(this.value)" id="brandFilter"></select>
-    <select class="filter-select" onchange="handlePriceFilter(this.value)" id="priceFilter">
-      <option value="">Sort Budget</option>
-      <option value="0-1000">Under GH₵1,000</option>
-      <option value="1000-3000">GH₵1,000 – GH₵3,000</option>
-      <option value="3000-6000">GH₵3,000 – GH₵6,000</option>
-      <option value="6000-99999">GH₵6,000+</option>
-    </select>
+    <select class="filter-select" onchange="handlePriceFilter(this.value)" id="priceFilter"><option value="">Price</option><option value="0-1000">Under GH₵1k</option><option value="1000-3000">GH₵1k–3k</option><option value="3000-6000">GH₵3k–6k</option><option value="6000-99999">GH₵6k+</option></select>
   </div>
-
-  <!-- Hardware Grid Output -->
   <div class="products-grid" id="productsGrid"></div>
 </div>
 
-<!-- FOOTER -->
+<!-- ===== FOOTER ===== -->
 <footer>
   <div class="footer-grid">
-    <div class="footer-brand">
-      <div class="logo">ELECTRO<span>HUB</span></div>
-      <p>Your Ultimate Technology Destination. Designing space-age workstation arrays and modular setups across Accra, Ghana.</p>
-    </div>
-    <div class="footer-col">
-      <h4>High-End PCs</h4>
-      <a onclick="filterByCategory('Laptop')">Laptops</a>
-      <a onclick="filterByCategory('Monitor')">Monitors</a>
-      <a onclick="filterByCategory('Keyboard')">Keyboards</a>
-      <a onclick="filterByCategory('Mouse')">Mice</a>
-    </div>
-    <div class="footer-col">
-      <h4>Base Architecture</h4>
-      <a onclick="filterByCategory('GPU')">GPUs</a>
-      <a onclick="filterByCategory('CPU')">Processors</a>
-      <a onclick="filterByCategory('RAM')">RAM Kits</a>
-      <a onclick="filterByCategory('Case')">PC Chassis</a>
-    </div>
-    <div class="footer-col">
-      <h4>System Diagnostics</h4>
-      <a onclick="openWhatsApp('')">💬 Order Verification Chat</a>
-      <a>📍 East Legon, Accra, Ghana</a>
-      <a>✅ Certified Original Warranties</a>
-    </div>
+    <div class="footer-brand"><div class="logo">ELECTRO<span>HUB</span></div><p>Accra's premium hardware configurator.</p></div>
+    <div class="footer-col"><h4>Systems</h4><a onclick="filterByCategory('Laptop')">Laptops</a><a onclick="filterByCategory('Monitor')">Monitors</a><a onclick="filterByCategory('Keyboard')">Keyboards</a><a onclick="filterByCategory('Mouse')">Mice</a></div>
+    <div class="footer-col"><h4>Core</h4><a onclick="filterByCategory('GPU')">GPUs</a><a onclick="filterByCategory('CPU')">CPUs</a></div>
+    <div class="footer-col"><h4>Support</h4><a onclick="openWhatsApp('')">💬 WhatsApp</a><a>📍 East Legon</a></div>
   </div>
 </footer>
 
-<!-- SYSTEM TOAST -->
+<!-- ===== TOAST ===== -->
 <div class="toast" id="toast"></div>
 
-<!-- OVERLAYS & DRAWERS -->
+<!-- ===== DRAWER ===== -->
 <div class="drawer-overlay" id="drawerOverlay" onclick="closeCart()"></div>
-
-<!-- CART DRAWER -->
 <div class="cart-drawer" id="cartDrawer">
-  <div class="drawer-header">
-    <div class="drawer-title">🛒 Active Workspace Cart</div>
-    <button class="drawer-close" onclick="closeCart()">✕</button>
-  </div>
+  <div class="drawer-header"><div class="drawer-title">🛒 Cart</div><button class="drawer-close" onclick="closeCart()">✕</button></div>
   <div class="cart-items" id="cartItems"></div>
-  <div class="cart-footer" id="cartFooter" style="display:none;">
-    <div class="cart-total-row">
-      <span class="cart-total-label">System Value</span>
-      <span class="cart-total-val" id="cartTotal">GH₵0</span>
-    </div>
-    <button class="wa-btn" onclick="openCheckout()">💬 Complete Order Over WhatsApp</button>
-    <button class="clear-btn" onclick="clearCart()">🗑 Reset Cart</button>
+  <div class="cart-footer" id="cartFooter" style="display:none;"><div class="cart-total-row"><span class="cart-total-label">Total</span><span class="cart-total-val" id="cartTotal">GH₵0</span></div><button class="wa-btn" onclick="openMooreCheckout()">🛡️ Checkout</button><button class="clear-btn" onclick="clearCart()">🗑 Reset</button></div>
+</div>
+
+<!-- ===== CHECKOUT MODAL ===== -->
+<div class="modal-overlay" id="mooreCheckoutModal">
+  <div class="modal" style="max-width:480px;">
+    <h2>Pre‑Order <span class="preorder-badge">50% Deposit</span></h2>
+    <p>Lock in your build with a 50% deposit.</p>
+    <div id="checkoutLoginPrompt" style="display:none;margin-bottom:12px;padding:12px;background:rgba(59,130,246,0.05);border:1px solid var(--primary-blue);border-radius:var(--radius);text-align:center;"><div style="font-size:12px;margin-bottom:6px;">Login to secure pre‑order.</div><button class="btn-primary" style="width:100%;justify-content:center;padding:8px;" onclick="closeMooreCheckout();openAuth('login');">Login / Register</button></div>
+    <div class="checkout-summary" id="checkoutSummary"></div>
+    <div class="deposit-highlight"><div style="font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);">Deposit (50%)</div><div class="deposit-amount" id="depositAmount">GH₵0</div></div>
+    <div class="form-group"><label class="form-label">Full Name *</label><input class="form-input" type="text" id="coName" placeholder="Kwame Mensah"></div>
+    <div class="form-group"><label class="form-label">WhatsApp *</label><input class="form-input" type="tel" id="coPhone" placeholder="050 301 0012"></div>
+    <div class="form-group"><label class="form-label">Location</label><input class="form-input" type="text" id="coLocation" placeholder="East Legon, Accra"></div>
+    <div class="modal-btns"><button class="modal-cancel" onclick="closeMooreCheckout()">Cancel</button><button class="modal-confirm" onclick="processPreOrder()">Pay Deposit</button></div>
   </div>
 </div>
 
-<!-- DISPATCH COORDINATES MODAL -->
-<div class="modal-overlay" id="checkoutModal">
-  <div class="modal">
-    <h2>📦 Complete Order Assembly</h2>
-    <p>Provide contact credentials to format the automated order layout for WhatsApp dispatch.</p>
-    <div class="form-group">
-      <label class="form-label">Full Name *</label>
-      <input class="form-input" type="text" id="custName" placeholder="Kwame Mensah">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Mobile Line *</label>
-      <input class="form-input" type="tel" id="custPhone" placeholder="050 301 0012">
-    </div>
-    <div class="form-group">
-      <label class="form-label">GHPost Address / Delivery City</label>
-      <input class="form-input" type="text" id="custLocation" placeholder="GA-124-5231, Accra">
-    </div>
-    <div class="modal-btns">
-      <button class="modal-cancel" onclick="closeCheckout()">Cancel</button>
-      <button class="modal-confirm" onclick="sendWhatsApp()">💬 Dispatch Order to WhatsApp</button>
-    </div>
+<!-- ===== PREORDER SUCCESS ===== -->
+<div class="modal-overlay" id="preorderSuccessModal">
+  <div class="modal" style="text-align:center;max-width:420px;">
+    <div style="font-size:40px;margin-bottom:8px;">✅</div>
+    <h2>Pre‑Order Locked</h2>
+    <p style="margin-top:8px;">Your 50% deposit reserves your gear.</p>
+    <div style="background:var(--bg-inner);border:1px solid var(--border-grid);border-radius:var(--radius);padding:14px;margin:16px 0;text-align:left;"><div style="font-size:10px;color:var(--text-dim);">REFERENCE</div><div id="preorderRef" style="font-family:var(--font-heading);color:var(--neon-orange);font-size:18px;letter-spacing:1px;">#REF-0000</div></div>
+    <button class="btn-primary" style="width:100%;justify-content:center;margin-bottom:10px;padding:10px;" onclick="openWhatsAppPreOrder()">💬 Chat Owner</button>
+    <button class="btn-outline" style="width:100%;justify-content:center;padding:10px;" onclick="closePreorderSuccess()">Continue</button>
   </div>
 </div>
 
-<!-- HARDWARE INFO POPUP SPEC -->
-<div class="modal-overlay" id="productModal">
-  <div class="modal product-modal">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
-      <div style="font-size:10px;text-transform:uppercase;letter-spacing:2px;color:var(--color-neon-cyan);font-weight:700;">Hardware Specification Matrix</div>
-      <button class="drawer-close" onclick="closeProductModal()">✕</button>
-    </div>
-    <div class="pm-top">
-      <div class="pm-img-container">
-        <img class="pm-img" id="pmImg" src="" alt="Hardware Item">
-      </div>
-      <div class="pm-info">
-        <div class="pm-brand" id="pmBrand"></div>
-        <div class="pm-name" id="pmName"></div>
-        <div class="pm-stars" id="pmStars"></div>
-        <div class="pm-price" id="pmPrice"></div>
-        <div class="pm-specs" id="pmSpecs"></div>
-      </div>
-    </div>
-    <div class="pm-action-row">
-      <button class="btn-primary pm-add" id="pmAddBtn" onclick="addFromModal()">🛒 Lock in Cart</button>
-      <button class="pm-pin" id="pmPinBtn" onclick="pinFromModal()">📌 Pin to Workspace</button>
-    </div>
-  </div>
-</div>
+<!-- ===== AUTH MODALS ===== -->
+<div class="modal-overlay" id="loginModal"><div class="modal"><h2>Login</h2><p>Access your builds.</p><div id="loginMsg" style="color:var(--danger);font-size:12px;min-height:18px;text-align:center;"></div><div class="form-group"><label class="form-label">Email or Phone</label><input class="form-input" type="text" id="loginId" placeholder="user@email.com"></div><div class="form-group"><label class="form-label">Password</label><input class="form-input" type="password" id="loginPass" placeholder="••••••••"></div><div class="modal-btns"><button class="modal-cancel" onclick="closeAuth()">Cancel</button><button class="modal-confirm" onclick="loginUser()">Login</button></div><div class="auth-toggle" style="margin-top:12px;font-size:12px;">No account? <a onclick="switchAuth('register')" style="color:var(--primary-blue);font-weight:700;">Register</a></div></div></div>
+<div class="modal-overlay" id="registerModal"><div class="modal"><h2>Register</h2><p>Create your account.</p><div id="regMsg" style="color:var(--danger);font-size:12px;min-height:18px;text-align:center;"></div><div class="form-group"><label class="form-label">Full Name</label><input class="form-input" type="text" id="regName" placeholder="Kwame Mensah"></div><div class="form-group"><label class="form-label">Email</label><input class="form-input" type="email" id="regEmail" placeholder="kwame@email.com"></div><div class="form-group"><label class="form-label">Phone</label><input class="form-input" type="tel" id="regPhone" placeholder="050 301 0012"></div><div class="form-group"><label class="form-label">Password</label><input class="form-input" type="password" id="regPass" placeholder="••••••••"></div><div class="modal-btns"><button class="modal-cancel" onclick="closeAuth()">Cancel</button><button class="modal-confirm" onclick="registerUser()">Register</button></div><div class="auth-toggle" style="margin-top:12px;font-size:12px;">Have an account? <a onclick="switchAuth('login')" style="color:var(--primary-blue);font-weight:700;">Login</a></div></div></div>
+
+<!-- ===== PRODUCT MODAL ===== -->
+<div class="modal-overlay" id="productModal"><div class="modal product-modal"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><div style="font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--neon-orange);font-weight:700;">Specs</div><button class="drawer-close" onclick="closeProductModal()">✕</button></div><div class="pm-top"><div class="pm-img-container"><img class="pm-img" id="pmImg" src="" alt=""></div><div class="pm-info"><div class="pm-brand" id="pmBrand"></div><div class="pm-name" id="pmName"></div><div class="pm-stars" id="pmStars"></div><div class="pm-price" id="pmPrice"></div><div class="pm-specs" id="pmSpecs"></div></div></div><div class="pm-action-row"><button class="btn-primary pm-add" onclick="addFromModal()">🛒 Add</button><button class="pm-pin" onclick="pinFromModal()">📌 Pin</button></div></div></div>
 
 <script>
-// ===== REAL-LIFE PREMIUM PRODUCT IMAGE DATABASE =====
-const products = [
-  // LAPTOPS
-  {id:1,cat:'Laptop',brand:'Lenovo',name:'Lenovo Legion 5 Pro',specs:'AMD Ryzen 7 6800H | RTX 3070 | 16GB RAM | 512GB SSD | 165Hz',price:8999,image:'https://images.unsplash.com/photo-1603302576837-37561b2e2302?q=80&w=600&auto=format&fit=crop',rating:5,badge:'Best Seller',tdp:230},
-  {id:2,cat:'Laptop',brand:'ASUS',name:'ASUS ROG Strix G15',specs:'AMD Ryzen 9 6900HX | RTX 3080 | 32GB RAM | 1TB SSD | 300Hz',price:12500,image:'https://images.unsplash.com/photo-1593642632823-8f785ba67e45?q=80&w=600&auto=format&fit=crop',rating:5,badge:'Top Pick',tdp:240},
-  {id:3,cat:'Laptop',brand:'HP',name:'HP Omen 16',specs:'Intel i7-12700H | RTX 3060 | 16GB RAM | 512GB SSD | 144Hz',price:7200,image:'https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?q=80&w=600&auto=format&fit=crop',rating:4,badge:'',tdp:200},
-  {id:4,cat:'Laptop',brand:'Dell',name:'Dell G15 Gaming',specs:'Intel i5-12500H | RTX 3050 | 8GB RAM | 256GB SSD | 120Hz',price:5500,image:'https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?q=80&w=600&auto=format&fit=crop',rating:4,badge:'',tdp:180},
-  {id:5,cat:'Laptop',brand:'Acer',name:'Acer Nitro 5',specs:'AMD Ryzen 5 6600H | RTX 3060 | 16GB RAM | 512GB SSD | 144Hz',price:6200,image:'https://images.unsplash.com/photo-1629131726617-66883b013b9f?q=80&w=600&auto=format&fit=crop',rating:4,badge:'',tdp:180},
-  {id:6,cat:'Laptop',brand:'MSI',name:'MSI Katana GF66',specs:'Intel i7-12650H | RTX 3060 | 16GB RAM | 512GB NVMe | 144Hz',price:7800,image:'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?q=80&w=600&auto=format&fit=crop',rating:5,badge:'',tdp:195},
-  {id:12,cat:'Laptop',brand:'Acer',name:'Acer Predator Helios 300',specs:'Intel i7-12700H | RTX 3070 Ti | 16GB RAM | 1TB SSD | 165Hz',price:10200,image:'https://images.unsplash.com/photo-1504707748692-419802cf939d?q=80&w=600&auto=format&fit=crop',rating:5,badge:'',tdp:240},
+// ============================================================
+//  ELECTROHUB – FULL SCRIPT (mobile-first, responsive)
+// ============================================================
 
-  // MONITORS
-  {id:30,cat:'Monitor',brand:'LG',name:'LG UltraGear 27" 4K',specs:'27" 4K IPS | 144Hz | G-Sync Compatible | HDR600 | 1ms',price:4800,image:'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?q=80&w=600&auto=format&fit=crop',rating:5,badge:'Best Seller',tdp:65},
-  {id:31,cat:'Monitor',brand:'Samsung',name:'Samsung Odyssey G7 27"',specs:'27" QHD VA Curved | 240Hz | 1ms | G-Sync | DisplayHDR600',price:5200,image:'https://images.unsplash.com/photo-1616763355548-1b606f439f86?q=80&w=600&auto=format&fit=crop',rating:5,badge:'Top Pick',tdp:80},
-  {id:32,cat:'Monitor',brand:'ASUS',name:'ASUS ROG Swift PG279QM',specs:'27" QHD IPS | 240Hz | 1ms | G-Sync | HDR400',price:6500,image:'https://images.unsplash.com/photo-1547119957-637f8679db1e?q=80&w=600&auto=format&fit=crop',rating:5,badge:'',tdp:90},
-  {id:33,cat:'Monitor',brand:'MSI',name:'MSI Optix MAG274QRF',specs:'27" QHD IPS | 165Hz | 1ms | FreeSync | Wide Color',price:3800,image:'https://images.unsplash.com/photo-1551645121-d1034da75057?q=80&w=600&auto=format&fit=crop',rating:4,badge:'',tdp:45},
+// ===== CONFIG =====
+const STORAGE_KEYS = {
+  users: "eh_users",
+  currentUser: "eh_currentUser",
+  preorders: "eh_preorders",
+  cart: "eh_cart",
+  setup: "eh_setup"
+};
+const fmt = (n) => 'GH₵' + n.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
-  // KEYBOARDS
-  {id:40,cat:'Keyboard',brand:'Logitech',name:'Logitech G Pro X TKL',specs:'Mechanical TKL | Hot-swap | GX Blue/Red/Brown | RGB | PBT Keycaps',price:2300,image:'https://images.unsplash.com/photo-1595225476474-87563907a212?q=80&w=600&auto=format&fit=crop',rating:5,badge:'Best Seller',tdp:5},
-  {id:41,cat:'Keyboard',brand:'Razer',name:'Razer BlackWidow V3 TKL',specs:'Mechanical TKL | Razer Green | RGB | Doubleshot ABS | USB-A',price:2100,image:'https://images.unsplash.com/photo-1601445638532-3c6f6c3aa1d6?q=80&w=600&auto=format&fit=crop',rating:5,badge:'',tdp:5},
-  {id:42,cat:'Keyboard',brand:'Corsair',name:'Corsair K70 RGB MK.2',specs:'Full-size | Cherry MX Red | Per-key RGB | Aircraft Aluminum | Wrist Rest',price:2800,image:'https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?q=80&w=600&auto=format&fit=crop',rating:5,badge:'Premium',tdp:5},
-  {id:43,cat:'Keyboard',brand:'SteelSeries',name:'SteelSeries Apex Pro',specs:'Full-size | OmniPoint Adjustable | OLED Screen | Per-key RGB | Wrist Rest',price:3500,image:'https://images.unsplash.com/photo-1587829741301-dc798b83add3?q=80&w=600&auto=format&fit=crop',rating:5,badge:'Top Tech',tdp:8},
-  {id:44,cat:'Keyboard',brand:'Redragon',name:'Redragon K552 Kumara',specs:'TKL | Outemu Blue | Backlighting | ABS | Budget Pick | USB',price:650,image:'https://images.unsplash.com/photo-1560769629-975ec94e6a86?q=80&w=600&auto=format&fit=crop',rating:4,badge:'Budget',tdp:3},
-
-  // MICE
-  {id:50,cat:'Mouse',brand:'Logitech',name:'Logitech G Pro X Superlight 2',specs:'61g Ultra-Light | HERO 25K Sensor | Up to 300IPS | 5 Buttons | USB',price:1800,image:'https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?q=80&w=600&auto=format&fit=crop',rating:5,badge:'Best Seller',tdp:2},
-  {id:51,cat:'Mouse',brand:'Razer',name:'Razer DeathAdder V3',specs:'59g | Razer Focus Pro 30K | 8 Programmable Buttons | HyperSpeed Wireless',price:2200,image:'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?q=80&w=600&auto=format&fit=crop',rating:5,badge:'',tdp:2},
-  {id:52,cat:'Mouse',brand:'Glorious',name:'Glorious Model O Wireless',specs:'69g | BAMF Sensor 19K | Flexible Paracord | Honeycomb Shell | 6 Buttons',price:1600,image:'https://images.unsplash.com/photo-1625842268584-8f3290455651?q=80&w=600&auto=format&fit=crop',rating:5,badge:'Value',tdp:2},
-
-  // HEADSETS
-  {id:60,cat:'Headset',brand:'HyperX',name:'HyperX Cloud III Wireless',specs:'Wireless | 53mm Angled Drivers | 7.1 Surround | USB-C | 2.4GHz',price:2500,image:'https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?q=80&w=600&auto=format&fit=crop',rating:5,badge:'Best Seller',tdp:5},
-  {id:61,cat:'Headset',brand:'SteelSeries',name:'SteelSeries Arctis Nova Pro',specs:'Active Noise Cancellation | Hi-Fi Drivers | Dual Wireless | Retractable Mic',price:4800,image:'https://images.unsplash.com/photo-1546435770-a3e426bf472b?q=80&w=600&auto=format&fit=crop',rating:5,badge:'Premium',tdp:10},
-  {id:62,cat:'Headset',brand:'Logitech',name:'Logitech G735 Wireless',specs:'Wireless | LIGHTSPEED + Bluetooth | 40mm Drivers | Suspension Headband',price:2800,image:'https://images.unsplash.com/photo-1583394838336-acd977736f90?q=80&w=600&auto=format&fit=crop',rating:4,badge:'',tdp:5},
-
-  // GPUs
-  {id:70,cat:'GPU',brand:'NVIDIA',name:'NVIDIA RTX 4070 Ti',specs:'12GB GDDR6X | DLSS 3 | Ray Tracing | PCIe 4.0 | 2.6GHz Boost | 285W',price:9200,image:'https://images.unsplash.com/photo-1591488320449-011701bb6704?q=80&w=600&auto=format&fit=crop',rating:5,badge:'Best Seller',tdp:285},
-  {id:71,cat:'GPU',brand:'NVIDIA',name:'NVIDIA RTX 4080',specs:'16GB GDDR6X | DLSS 3 | Ray Tracing | PCIe 4.0 | 2.5GHz | 320W',price:16500,image:'https://images.unsplash.com/photo-1591488088746-24b514ff5f1a?q=80&w=600&auto=format&fit=crop',rating:5,badge:'High End',tdp:320},
-
-  // CPUs / RAM / STORAGE / CASE
-  {id:80,cat:'CPU',brand:'AMD',name:'AMD Ryzen 9 7950X',specs:'16 Cores / 32 Threads | 5.7GHz Boost | 64MB L3 Cache | AM5 | 170W',price:8200,image:'https://images.unsplash.com/photo-1591405351990-4726e331f141?q=80&w=600&auto=format&fit=crop',rating:5,badge:'Workstation',tdp:170},
-  {id:81,cat:'CPU',brand:'Intel',name:'Intel Core i9-13900K',specs:'24 Cores (8P+16E) / 32 Threads | 5.8GHz Boost | LGA1700 | 253W',price:9000,image:'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=600&auto=format&fit=crop',rating:5,badge:'Overclock King',tdp:253},
-  {id:90,cat:'RAM',brand:'Corsair',name:'Corsair Dominator Platinum 32GB',specs:'32GB (2x16) DDR5-5600 | CL36 | RGB | Intel XMP 3.0 | White/Black',price:1800,image:'https://images.unsplash.com/photo-1562976540-1502c2145186?q=80&w=600&auto=format&fit=crop',rating:5,badge:'Premium',tdp:10},
-  {id:100,cat:'SSD',brand:'Samsung',name:'Samsung 990 Pro 2TB NVMe',specs:'2TB PCIe 4.0 NVMe | 7450MB/s Read | 6900MB/s Write | M.2 2280',price:2800,image:'https://images.unsplash.com/photo-1597872200969-2b65dffc90a9?q=80&w=600&auto=format&fit=crop',rating:5,badge:'Best NVMe',tdp:8},
-  {id:110,cat:'Case',brand:'NZXT',name:'NZXT H510 Flow',specs:'Mid Tower ATX | 2x 140mm Fans | Tempered Glass | USB-C | Cable Management',price:1400,image:'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?q=80&w=600&auto=format&fit=crop',rating:5,badge:'Clean Build',tdp:0},
+// ===== PRODUCTS =====
+let products = [
+  { id:'p1', name:'ZenBook Pro 14', brand:'ASUS', cat:'Laptop', price:4500, specs:'14" OLED, i9-13900H, RTX 4070', img:'https://images.unsplash.com/photo-1593642632824-95b1c86b6dbb?w=300&auto=format&fit=crop', tdp:120, rating:4.8 },
+  { id:'p2', name:'Swift Edge 16', brand:'Acer', cat:'Laptop', price:3200, specs:'16" 4K, Ryzen 7, 16GB', img:'https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=300&auto=format&fit=crop', tdp:65, rating:4.5 },
+  { id:'p3', name:'UltraGear 34"', brand:'LG', cat:'Monitor', price:2800, specs:'34" 3440x1440, 160Hz', img:'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=300&auto=format&fit=crop', tdp:50, rating:4.7 },
+  { id:'p4', name:'ProArt 27"', brand:'ASUS', cat:'Monitor', price:1900, specs:'27" 4K, 100% Adobe RGB', img:'https://images.unsplash.com/photo-1567696911010-8dd36d5e37c6?w=300&auto=format&fit=crop', tdp:35, rating:4.9 },
+  { id:'p5', name:'Mech Pro TKL', brand:'Keychron', cat:'Keyboard', price:220, specs:'Hot-swappable, Gateron Red', img:'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=300&auto=format&fit=crop', tdp:5, rating:4.6 },
+  { id:'p6', name:'G915 X Lightspeed', brand:'Logitech', cat:'Keyboard', price:450, specs:'Wireless, Low-profile', img:'https://images.unsplash.com/photo-1618384887929-16ec33ad5e6a?w=300&auto=format&fit=crop', tdp:4, rating:4.4 },
+  { id:'p7', name:'Pro X Superlight', brand:'Logitech', cat:'Mouse', price:350, specs:'63g, HERO 25K', img:'https://images.unsplash.com/photo-1615663245857-ac93bb7c2e8e?w=300&auto=format&fit=crop', tdp:3, rating:4.8 },
+  { id:'p8', name:'Basilisk V3 Pro', brand:'Razer', cat:'Mouse', price:280, specs:'30K DPI, Wireless', img:'https://images.unsplash.com/photo-1625772452859-1c03d5b9a0f5?w=300&auto=format&fit=crop', tdp:3, rating:4.5 },
+  { id:'p9', name:'RTX 4080 Super', brand:'NVIDIA', cat:'GPU', price:5800, specs:'16GB GDDR6X, 7680 cores', img:'https://images.unsplash.com/photo-1591488320449-011701bb6704?w=300&auto=format&fit=crop', tdp:320, rating:4.9 },
+  { id:'p10', name:'RX 7900 XTX', brand:'AMD', cat:'GPU', price:5200, specs:'24GB GDDR6, 6144 cores', img:'https://images.unsplash.com/photo-1591488320449-011701bb6704?w=300&auto=format&fit=crop', tdp:350, rating:4.7 },
+  { id:'p11', name:'Ryzen 9 7950X', brand:'AMD', cat:'CPU', price:2800, specs:'16C/32T, 4.5GHz', img:'https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=300&auto=format&fit=crop', tdp:170, rating:4.9 },
+  { id:'p12', name:'Core i9-13900K', brand:'Intel', cat:'CPU', price:2600, specs:'24C/32T, 5.8GHz', img:'https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=300&auto=format&fit=crop', tdp:180, rating:4.8 }
 ];
 
-// ===== SYSTEM CONTROLLER & STATE =====
-let cart = JSON.parse(localStorage.getItem('eh_cart') || '[]');
-let currentSetup = JSON.parse(localStorage.getItem('eh_setup') || '{}');
-let quantities = {};
+// ===== STATE =====
+let cart = JSON.parse(localStorage.getItem(STORAGE_KEYS.cart) || '[]');
+let workspace = JSON.parse(localStorage.getItem(STORAGE_KEYS.setup) || '{"slots":{}}');
 let currentCategory = 'all';
-let currentBrand = '';
-let currentSearch = '';
-let priceRange = '';
-let sortOrder = 'low';
-let currentPage = 1;
-const PER_PAGE = 12;
+let searchQuery = '';
+let brandFilter = '';
+let priceFilter = '';
 let activeProductModal = null;
+let tempPreOrderData = null;
 
-const builderSlotsConfig = [
-  { key: 'Case', label: 'Rig Chassis' },
-  { key: 'CPU', label: 'Processing unit' },
-  { key: 'GPU', label: 'Graphics Accelerator' },
-  { key: 'Monitor', label: 'Monitor Spec' },
-  { key: 'Keyboard', label: 'Tactile Keyboard' },
-  { key: 'Mouse', label: 'Precision Mouse' }
-];
+// ===== SAVE HELPERS =====
+function saveCart(){ localStorage.setItem(STORAGE_KEYS.cart, JSON.stringify(cart)); }
+function saveWorkspace(){ localStorage.setItem(STORAGE_KEYS.setup, JSON.stringify(workspace)); }
 
-const categories = [
-  {name:'All Gear',key:'all'},
-  {name:'Laptops',key:'Laptop'},
-  {name:'Monitors',key:'Monitor'},
-  {name:'Keyboards',key:'Keyboard'},
-  {name:'Mice',key:'Mouse'},
-  {name:'Headsets',key:'Headset'},
-  {name:'GPUs',key:'GPU'},
-  {name:'Components',key:'CPU'},
-  {name:'Chassis',key:'Case'},
-];
-
-// ===== DIALOG LAYER CONTROLLERS (NO SYSTEM ALERTS) =====
-function showCustomAlert(title, message) {
-  document.getElementById('alertTitle').textContent = title;
-  document.getElementById('alertBody').textContent = message;
-  document.getElementById('customAlert').classList.add('open');
+// ===== AUTH =====
+function openAuth(m){ closeAuth(); document.getElementById(m==='login'?'loginModal':'registerModal').classList.add('open'); }
+function closeAuth(){ ['loginModal','registerModal'].forEach(id=>document.getElementById(id).classList.remove('open')); document.getElementById('loginMsg').textContent=''; document.getElementById('regMsg').textContent=''; }
+function switchAuth(m){ closeAuth(); openAuth(m); }
+function registerUser(){
+  const name=document.getElementById('regName').value.trim(), email=document.getElementById('regEmail').value.trim().toLowerCase(), phone=document.getElementById('regPhone').value.trim(), pass=document.getElementById('regPass').value, msg=document.getElementById('regMsg');
+  if(!name||!email||!pass){ msg.textContent='All fields required.'; return; }
+  let users=JSON.parse(localStorage.getItem(STORAGE_KEYS.users)||'[]');
+  if(users.find(u=>u.email===email)){ msg.textContent='Email already registered.'; return; }
+  const newUser={id:Date.now().toString(),name,email,phone,password:pass};
+  users.push(newUser); localStorage.setItem(STORAGE_KEYS.users,JSON.stringify(users)); localStorage.setItem(STORAGE_KEYS.currentUser,JSON.stringify(newUser));
+  updateAuthUI(); closeAuth(); showToast('Account created.');
 }
-function closeCustomAlert() { document.getElementById('customAlert').classList.remove('open'); }
-
-let confirmSuccessCallback = null;
-function showCustomConfirm(title, message, onSuccess) {
-  document.getElementById('confirmTitle').textContent = title;
-  document.getElementById('confirmBody').textContent = message;
-  confirmSuccessCallback = onSuccess;
-  document.getElementById('customConfirm').classList.add('open');
+function loginUser(){
+  const id=document.getElementById('loginId').value.trim(), pass=document.getElementById('loginPass').value, msg=document.getElementById('loginMsg');
+  if(!id||!pass){ msg.textContent='Enter credentials.'; return; }
+  let users=JSON.parse(localStorage.getItem(STORAGE_KEYS.users)||'[]');
+  const user=users.find(u=>(u.email===id||u.phone===id)&&u.password===pass);
+  if(!user){ msg.textContent='Invalid credentials.'; return; }
+  localStorage.setItem(STORAGE_KEYS.currentUser,JSON.stringify(user)); updateAuthUI(); closeAuth(); showToast('Welcome '+user.name);
 }
-document.getElementById('confirmCancelBtn').addEventListener('click', () => {
-  document.getElementById('customConfirm').classList.remove('open');
-  confirmSuccessCallback = null;
-});
-document.getElementById('confirmOkBtn').addEventListener('click', () => {
-  document.getElementById('customConfirm').classList.remove('open');
-  if (confirmSuccessCallback) confirmSuccessCallback();
-});
-
-// ===== CATEGORY RENDER ENGINE =====
-function buildCats() {
-  const g = document.getElementById('catsGrid');
-  g.innerHTML = categories.map(c => `
-    <div class="cat-card ${currentCategory===c.key?'active':''}" onclick="filterByCategory('${c.key}')">
-      <div class="cat-name">${c.name}</div>
-    </div>
-  `).join('');
+function logoutUser(){ localStorage.removeItem(STORAGE_KEYS.currentUser); updateAuthUI(); showToast('Logged out.'); }
+function updateAuthUI(){
+  const user=JSON.parse(localStorage.getItem(STORAGE_KEYS.currentUser)||'null');
+  document.getElementById('authSectionNav').style.display=user?'none':'flex';
+  const sec=document.getElementById('userSection');
+  if(user){ sec.style.display='flex'; document.getElementById('userNameDisplay').textContent=user.name; document.getElementById('userAvatar').textContent=user.name.charAt(0).toUpperCase(); }
+  else sec.style.display='none';
 }
 
-function buildBrandFilter() {
-  const brands = [...new Set(products.map(p=>p.brand))].sort();
-  const sel = document.getElementById('brandFilter');
-  sel.innerHTML = '<option value="">All Brands</option>' + brands.map(b=>`<option value="${b}">${b}</option>`).join('');
+// ===== CART =====
+function addToCart(id){
+  const p=products.find(x=>x.id===id); if(!p)return;
+  const ex=cart.find(c=>c.id===id);
+  if(ex) ex.qty+=1; else cart.push({...p,qty:1});
+  saveCart(); updateCartUI(); renderProducts(); showToast(p.name+' added.');
 }
-
-// ===== CONFIGURATOR WORKSPACE WORKFLOW =====
-function renderWorkspace() {
-  const target = document.getElementById('workspaceSlots');
-  let totalTdp = 0;
-  let totalBudget = 0;
-  let slotsFilled = 0;
-
-  target.innerHTML = builderSlotsConfig.map(slot => {
-    const pinnedItem = currentSetup[slot.key];
-    if (pinnedItem) {
-      totalTdp += (pinnedItem.tdp || 0);
-      totalBudget += pinnedItem.price;
-      slotsFilled++;
-      return `
-        <div class="workspace-slot filled" onclick="openProductModal(${pinnedItem.id})">
-          <button class="slot-remove" onclick="event.stopPropagation(); unpinSlot('${slot.key}')">✕</button>
-          <div class="slot-label">${slot.label}</div>
-          <img class="slot-img" src="${pinnedItem.image}" alt="Component">
-          <div class="slot-name">${pinnedItem.name}</div>
-          <div class="slot-price">${fmt(pinnedItem.price)}</div>
-        </div>
-      `;
-    } else {
-      return `
-        <div class="workspace-slot" onclick="filterByCategory('${slot.key}')">
-          <div class="slot-label">${slot.label}</div>
-          <div class="slot-placeholder">⬡</div>
-          <div class="slot-name" style="color:var(--color-text-dim);">Unconfigured Slot</div>
-          <div class="slot-price" style="font-size:10px; opacity:0.5;">Lock Down Category</div>
-        </div>
-      `;
-    }
-  }).join('');
-
-  document.getElementById('metricTdp').textContent = totalTdp + 'W';
-  document.getElementById('metricBudget').textContent = fmt(totalBudget);
-
-  const percent = Math.min(100, (totalBudget / 30000) * 100);
-  document.getElementById('budgetFill').style.width = percent + '%';
-
-  const alertBox = document.getElementById('compatAlert');
-  if (slotsFilled === 0) {
-    alertBox.style.borderColor = 'var(--color-border-grid)';
-    alertBox.style.background = 'rgba(255,255,255,0.01)';
-    alertBox.style.color = 'var(--color-text-dim)';
-    alertBox.innerHTML = `<span>⚙️ Pin hardware components from catalog specifications below to monitor diagnostic checks.</span>`;
-  } else if (totalTdp > 550) {
-    alertBox.style.borderColor = 'var(--color-accent-orange)';
-    alertBox.style.background = 'rgba(249, 115, 22, 0.08)';
-    alertBox.style.color = 'var(--color-accent-orange)';
-    alertBox.innerHTML = `<span>⚠️ Energy Load Alert: Estimated TDP (${totalTdp}W) requires an 850W+ Gold Rated Power Supply Unit.</span>`;
-  } else {
-    alertBox.style.borderColor = 'var(--color-success-green)';
-    alertBox.style.background = 'rgba(16, 185, 129, 0.08)';
-    alertBox.style.color = 'var(--color-success-green)';
-    alertBox.innerHTML = `<span>✅ System Diagnostic Clear: Synchronized connection verified across all locked slots (${slotsFilled}/6 verified).</span>`;
-  }
-}
-
-function pinItemToSlot(category, productId) {
-  const p = products.find(x=>x.id===productId);
-  if (!p) return;
-  const slot = builderSlotsConfig.find(s=>s.key===category);
-  if (!slot) {
-    showCustomAlert('Incompatible Module', `The category '${category}' cannot be pinned into the custom workspace.`);
-    return;
-  }
-  currentSetup[category] = p;
-  localStorage.setItem('eh_setup', JSON.stringify(currentSetup));
-  renderWorkspace();
-  showToast(`📌 Pinned ${p.name} inside Workspace`);
-}
-
-function unpinSlot(slotKey) {
-  if (currentSetup[slotKey]) {
-    delete currentSetup[slotKey];
-    localStorage.setItem('eh_setup', JSON.stringify(currentSetup));
-    renderWorkspace();
-    showToast('Module slot cleared.');
-  }
-}
-
-function resetWorkspace() {
-  showCustomConfirm('Reboot Workspace', 'Do you want to discard your current Workspace setup configuration?', () => {
-    currentSetup = {};
-    localStorage.removeItem('eh_setup');
-    renderWorkspace();
-    showToast('Workspace assembly cleared');
-  });
-}
-
-function addWorkspaceToCart() {
-  const keys = Object.keys(currentSetup);
-  if (keys.length === 0) {
-    showCustomAlert('No Pinned Hardware', 'Add components to your workspace templates before executing direct bulk transfer.');
-    return;
-  }
-  keys.forEach(k => {
-    const p = currentSetup[k];
-    const existing = cart.find(c=>c.id===p.id);
-    if (existing) {
-      existing.qty++;
-    } else {
-      cart.push({id: p.id, name: p.name, brand: p.brand, image: p.image, price: p.price, qty: 1});
-    }
-  });
-  saveCart();
-  updateCartUI();
-  renderProducts();
-  showToast(`✓ Locked ${keys.length} workspace elements into cart`);
-}
-
-// ===== SEARCH / FILTER COMPILATION =====
-function getFiltered() {
-  let list = [...products];
-  if (currentCategory !== 'all') list = list.filter(p=>p.cat===currentCategory);
-  if (currentBrand) list = list.filter(p=>p.brand===currentBrand);
-  if (currentSearch) {
-    const q = currentSearch.toLowerCase();
-    list = list.filter(p=>p.name.toLowerCase().includes(q)||p.brand.toLowerCase().includes(q)||p.specs.toLowerCase().includes(q));
-  }
-  if (priceRange) {
-    const [mn,mx] = priceRange.split('-').map(Number);
-    list = list.filter(p=>p.price>=mn&&p.price<=mx);
-  }
-  if (sortOrder==='low') list.sort((a,b)=>a.price-b.price);
-  else if (sortOrder==='high') list.sort((a,b)=>b.price-a.price);
-  else if (sortOrder==='name') list.sort((a,b)=>a.name.localeCompare(b.name));
-  else if (sortOrder==='rating') list.sort((a,b)=>b.rating-a.rating);
-  return list;
-}
-
-function filterByCategory(cat) {
-  currentCategory = cat;
-  currentPage = 1;
-  document.getElementById('brandFilter').value = '';
-  currentBrand = '';
-  buildCats();
-  renderProducts();
-  document.getElementById('shopSection').scrollIntoView({behavior:'smooth'});
-}
-function handleBrandFilter(v) { currentBrand = v; currentPage = 1; renderProducts(); }
-function handlePriceFilter(v) { priceRange = v; currentPage = 1; renderProducts(); }
-function handleSort(v) { sortOrder = v; currentPage = 1; renderProducts(); }
-function handleSearch(v) {
-  currentSearch = v;
-  currentPage = 1;
-  document.getElementById('filterSearch').value = v;
-  renderProducts();
-}
-
-// ===== HARDWARE PRODUCT RENDER =====
-function fmt(p) { return 'GH₵' + p.toLocaleString(); }
-function getStars(r) { return '★'.repeat(r) + '☆'.repeat(5-r); }
-
-function renderProducts() {
-  const filtered = getFiltered();
-  const slice = filtered.slice((currentPage-1)*PER_PAGE, currentPage*PER_PAGE);
-  const grid = document.getElementById('productsGrid');
-
-  if (slice.length===0) { grid.innerHTML=''; }
-  else {
-    grid.innerHTML = slice.map(p => {
-      const q = quantities[p.id] || 1;
-      const inCart = cart.find(c=>c.id===p.id);
-      const cartQty = inCart ? inCart.qty : 0;
-      return `
-      <div class="product-card" onclick="openProductModal(${p.id})">
-        <div class="product-img-container">
-          ${p.badge?`<div class="product-badge">${p.badge}</div>`:''}
-          <img class="product-img" src="${p.image}" alt="${p.name}" loading="lazy">
-        </div>
-        <div class="product-info">
-          <div>
-            <div class="product-brand">${p.brand}</div>
-            <div class="product-name">${p.name}</div>
-            <div class="product-specs">${p.specs}</div>
-          </div>
-          <div>
-            <div class="product-stars">${getStars(p.rating)}</div>
-            <div class="product-price">${fmt(p.price)}</div>
-            <div class="product-footer" onclick="event.stopPropagation()">
-              <div class="qty-control">
-                ${q>1?`<button class="qty-btn" onclick="changeQty(${p.id},-1)">−</button>`:'<span style="width:32px"></span>'}
-                <div class="qty-num">${q}</div>
-                <button class="qty-btn" onclick="changeQty(${p.id},1)">+</button>
-              </div>
-              <button class="add-btn ${cartQty>0?'added':''}" onclick="addToCart(${p.id})">
-                ${cartQty>0?'✓ Locked ('+cartQty+')':'+ Lock Cart'}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>`;
-    }).join('');
-
-    gsap.fromTo("#productsGrid .product-card", 
-      { opacity: 0, y: 30 },
-      { opacity: 1, y: 0, stagger: 0.05, duration: 0.4, ease: "power2.out", overwrite: "auto" }
-    );
-  }
-}
-
-function changeQty(id, delta) {
-  quantities[id] = Math.max(1, (quantities[id]||1) + delta);
-  renderProducts();
-}
-
-// ===== CART CORE SYSTEM =====
-function addToCart(id) {
-  const p = products.find(x=>x.id===id);
-  if (!p) return;
-  const qty = quantities[id] || 1;
-  const existing = cart.find(c=>c.id===id);
-  if (existing) existing.qty += qty;
-  else cart.push({id, name:p.name, brand:p.brand, image:p.image, price:p.price, qty});
-  quantities[id] = 1;
-  saveCart(); updateCartUI(); renderProducts();
-  showToast(`✓ Locked ${p.name} inside cart`);
-}
-
-function saveCart() { localStorage.setItem('eh_cart', JSON.stringify(cart)); }
-
-function updateCartUI() {
-  const total = cart.reduce((a,c)=>a+c.qty,0);
-  document.getElementById('cartCount').textContent = total;
-  renderCartItems();
-}
-
-function renderCartItems() {
-  const el = document.getElementById('cartItems');
-  const footer = document.getElementById('cartFooter');
-  if (cart.length===0) {
-    el.innerHTML = `<div class="cart-empty"><div>🛸</div><p>Workspace Cart Empty</p></div>`;
-    footer.style.display='none';
-    return;
-  }
+function adjustQty(id,d){ const item=cart.find(c=>c.id===id); if(item){ item.qty=Math.max(0,item.qty+d); if(item.qty===0) cart=cart.filter(c=>c.id!==id); saveCart(); updateCartUI(); renderProducts(); } else if(d>0) addToCart(id); }
+function removeCartItem(id){ cart=cart.filter(c=>c.id!==id); saveCart(); updateCartUI(); renderProducts(); }
+function clearCart(){ if(cart.length===0)return; if(confirm('Clear cart?')){ cart=[]; saveCart(); updateCartUI(); renderProducts(); showToast('Cart cleared.'); } }
+function updateCartUI(){
+  const count=cart.reduce((a,c)=>a+c.qty,0); document.getElementById('cartCount').textContent=count;
+  const container=document.getElementById('cartItems'), footer=document.getElementById('cartFooter');
+  if(cart.length===0){ container.innerHTML='<div class="cart-empty"><div>🛒</div><p>Empty</p></div>'; footer.style.display='none'; return; }
   footer.style.display='block';
-  el.innerHTML = cart.map(item=>`
-    <div class="cart-item">
-      <img class="cart-item-img" src="${item.image}" alt="Item">
-      <div class="cart-item-info">
-        <div class="cart-item-name">${item.name}</div>
-        <div class="cart-item-brand">${item.brand}</div>
-        <div class="cart-item-row">
-          <div class="cart-qty-wrap">
-            <button class="cart-qty-btn" onclick="cartQtyChange(${item.id},-1)">−</button>
-            <span class="cart-qty-num">${item.qty}</span>
-            <button class="cart-qty-btn" onclick="cartQtyChange(${item.id},1)">+</button>
-          </div>
-          <span class="cart-item-price" style="margin-left:auto;">${fmt(item.price * item.qty)}</span>
-          <button class="cart-item-remove" onclick="removeFromCart(${item.id})">Remove</button>
-        </div>
-      </div>
-    </div>
-  `).join('');
-  const total = cart.reduce((a,c)=>a+(c.price*c.qty),0);
-  document.getElementById('cartTotal').textContent = fmt(total);
+  container.innerHTML=cart.map(i=>`<div class="cart-item"><img class="cart-item-img" src="${i.img}"><div class="cart-item-info"><div class="cart-item-name">${i.name}</div><div class="cart-item-brand">${i.brand}</div><div class="cart-item-price">${fmt(i.price)}</div><div class="cart-item-row"><div class="cart-qty-wrap"><button class="cart-qty-btn" onclick="cartQty('${i.id}',-1)">−</button><span class="cart-qty-num">${i.qty}</span><button class="cart-qty-btn" onclick="cartQty('${i.id}',1)">+</button></div><button class="cart-item-remove" onclick="removeCartItem('${i.id}')">✕</button></div></div></div>`).join('');
+  const total=cart.reduce((a,c)=>a+c.price*c.qty,0); document.getElementById('cartTotal').textContent=fmt(total);
+}
+function cartQty(id,d){ const item=cart.find(c=>c.id===id); if(item){ item.qty=Math.max(0,item.qty+d); if(item.qty===0) cart=cart.filter(c=>c.id!==id); saveCart(); updateCartUI(); renderProducts(); } }
+function openCart(){ document.getElementById('cartDrawer').classList.add('open'); document.getElementById('drawerOverlay').classList.add('open'); updateCartUI(); }
+function closeCart(){ document.getElementById('cartDrawer').classList.remove('open'); document.getElementById('drawerOverlay').classList.remove('open'); }
+
+// ===== WORKSPACE =====
+function renderWorkspace(){
+  const slots=document.getElementById('workspaceSlots');
+  const cats=[...new Set(products.map(p=>p.cat))];
+  cats.forEach(c=>{ if(!workspace.slots[c]) workspace.slots[c]=null; });
+  saveWorkspace();
+  slots.innerHTML=cats.map(c=>{
+    const id=workspace.slots[c], item=id?products.find(p=>p.id===id):null, filled=!!item;
+    return `<div class="workspace-slot ${filled?'filled':''}" data-cat="${c}" onclick="openSlotPicker('${c}')">${filled?`<button class="slot-remove" onclick="event.stopPropagation();removeFromSlot('${c}')">✕</button>`:''}<div class="slot-label">${c}</div>${filled?`<img class="slot-img" src="${item.img}">`:`<div class="slot-placeholder">+</div>`}<div class="slot-name">${filled?item.name:'Empty'}</div>${filled?`<div class="slot-price">${fmt(item.price)}</div>`:'<div style="font-size:8px;color:var(--text-dim);">Tap</div>'}</div>`;
+  }).join('');
+  updateMetrics();
+}
+function openSlotPicker(cat){
+  const items=products.filter(p=>p.cat===cat);
+  if(!items.length){ showToast('No items.'); return; }
+  const names=items.map((p,i)=>`${i+1}. ${p.name} (${fmt(p.price)})`).join('\n');
+  const choice=prompt(`Select a ${cat}:\n${names}\n\nEnter number (1-${items.length})`);
+  if(choice===null)return; const idx=parseInt(choice)-1;
+  if(isNaN(idx)||idx<0||idx>=items.length){ showToast('Invalid.'); return; }
+  pinItemToSlot(cat, items[idx].id);
+}
+function pinItemToSlot(cat,id){ const p=products.find(x=>x.id===id); if(!p)return; workspace.slots[cat]=id; saveWorkspace(); renderWorkspace(); showToast(`Pinned ${p.name}`); }
+function removeFromSlot(cat){ workspace.slots[cat]=null; saveWorkspace(); renderWorkspace(); showToast('Removed.'); }
+function resetWorkspace(){ if(confirm('Reset all slots?')){ Object.keys(workspace.slots).forEach(c=>workspace.slots[c]=null); saveWorkspace(); renderWorkspace(); showToast('Reset.'); } }
+function updateMetrics(){
+  let tdp=0, price=0, count=0;
+  for(const cat in workspace.slots){ const id=workspace.slots[cat]; if(id){ const p=products.find(x=>x.id===id); if(p){ tdp+=p.tdp||0; price+=p.price; count++; } } }
+  document.getElementById('metricTdp').textContent=tdp+'W';
+  document.getElementById('metricBudget').textContent=fmt(price);
+  document.getElementById('budgetFill').style.width=Math.min(100,(price/15000)*100)+'%';
+  const alert=document.getElementById('compatAlert');
+  if(count===0) alert.innerHTML='<span>No components pinned.</span>';
+  else if(tdp>600) alert.innerHTML=`<span style="color:var(--danger);">⚠️ High power: ${tdp}W</span>`;
+  else alert.innerHTML=`<span style="color:var(--success);">✅ ${count} components synced.</span>`;
+}
+function addWorkspaceToCart(){
+  let added=0;
+  for(const cat in workspace.slots){ const id=workspace.slots[cat]; if(id){ const ex=cart.find(c=>c.id===id); if(ex) ex.qty+=1; else{ const p=products.find(x=>x.id===id); if(p) cart.push({...p,qty:1}); } added++; } }
+  if(!added){ showToast('Workspace empty.'); return; }
+  saveCart(); updateCartUI(); renderProducts(); showToast(`Added ${added} items.`);
 }
 
-function cartQtyChange(id, delta) {
-  const item = cart.find(c=>c.id===id);
-  if (!item) return;
-  item.qty = Math.max(1, item.qty + delta);
-  saveCart(); updateCartUI(); renderProducts();
+// ===== PRODUCTS & FILTERS =====
+function buildCats(){
+  const cats=[...new Set(products.map(p=>p.cat))];
+  const grid=document.getElementById('catsGrid');
+  grid.innerHTML=`<div class="cat-card active" data-cat="all" onclick="filterByCategory('all')"><div>🧩</div><div class="cat-name">All</div></div>`;
+  cats.forEach(c=>{ grid.innerHTML+=`<div class="cat-card" data-cat="${c}" onclick="filterByCategory('${c}')"><div>${c==='Laptop'?'💻':c==='Monitor'?'🖥️':c==='Keyboard'?'⌨️':c==='Mouse'?'🖱️':c==='GPU'?'🎮':'⚡'}</div><div class="cat-name">${c}</div></div>`; });
 }
-function removeFromCart(id) {
-  cart = cart.filter(c=>c.id!==id);
-  saveCart(); updateCartUI(); renderProducts();
+function buildBrandFilter(){
+  const brands=[...new Set(products.map(p=>p.brand))];
+  const sel=document.getElementById('brandFilter');
+  sel.innerHTML='<option value="">All Brands</option>';
+  brands.forEach(b=>sel.innerHTML+=`<option value="${b}">${b}</option>`);
 }
-function clearCart() {
-  showCustomConfirm('Clear Cart Config', 'Are you sure you want to discard your entire current configuration cart?', () => {
-    cart = []; saveCart(); updateCartUI(); renderProducts(); showToast('Configuration cart reset');
+function filterByCategory(cat){ currentCategory=cat; document.querySelectorAll('.cat-card').forEach(el=>el.classList.toggle('active',el.dataset.cat===cat)); renderProducts(); }
+function handleSearch(q){ searchQuery=q.toLowerCase(); renderProducts(); }
+function handleBrandFilter(b){ brandFilter=b; renderProducts(); }
+function handlePriceFilter(p){ priceFilter=p; renderProducts(); }
+
+function renderProducts(){
+  const grid=document.getElementById('productsGrid');
+  let filtered=products.filter(p=>{
+    if(currentCategory!=='all'&&p.cat!==currentCategory)return false;
+    if(searchQuery&&!p.name.toLowerCase().includes(searchQuery)&&!p.specs.toLowerCase().includes(searchQuery)&&!p.brand.toLowerCase().includes(searchQuery))return false;
+    if(brandFilter&&p.brand!==brandFilter)return false;
+    if(priceFilter){ const [min,max]=priceFilter.split('-').map(Number); if(p.price<min||p.price>max)return false; }
+    return true;
   });
+  if(!filtered.length){ grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px 0;color:var(--text-dim);font-size:13px;">No matches.</div>'; return; }
+  grid.innerHTML=filtered.map(p=>{
+    const inCart=cart.find(c=>c.id===p.id), qty=inCart?inCart.qty:0;
+    const stars='★'.repeat(Math.floor(p.rating))+'☆'.repeat(5-Math.floor(p.rating));
+    return `<div class="product-card"><div class="product-img-container"><img class="product-img" src="${p.img}" loading="lazy"><span class="product-badge">${p.brand}</span></div><div class="product-info"><div class="product-brand">${p.cat}</div><div class="product-name">${p.name}</div><div class="product-specs">${p.specs}</div><div class="product-stars">${stars}</div><div class="product-price">${fmt(p.price)}</div><div class="product-footer"><div class="qty-control"><button class="qty-btn" onclick="event.stopPropagation();adjustQty('${p.id}',-1)">−</button><span class="qty-num">${qty}</span><button class="qty-btn" onclick="event.stopPropagation();adjustQty('${p.id}',1)">+</button></div><button class="add-btn" onclick="event.stopPropagation();addToCart('${p.id}')">Add</button><button class="add-btn" style="flex:0.4;background:var(--bg-inner);border-color:var(--border-grid);font-size:10px;min-width:30px;" onclick="event.stopPropagation();openProductModal('${p.id}')">🔍</button></div></div></div>`;
+  }).join('');
 }
 
-function openCart() {
-  document.getElementById('cartDrawer').classList.add('open');
-  document.getElementById('drawerOverlay').classList.add('open');
-  renderCartItems();
+// ===== PRODUCT MODAL =====
+function openProductModal(id){ const p=products.find(x=>x.id===id); if(!p)return; activeProductModal=id; document.getElementById('pmImg').src=p.img; document.getElementById('pmBrand').textContent=p.brand+' • '+p.cat; document.getElementById('pmName').textContent=p.name; document.getElementById('pmPrice').textContent=fmt(p.price); document.getElementById('pmSpecs').textContent=p.specs; document.getElementById('pmStars').textContent='★'.repeat(Math.floor(p.rating))+'☆'.repeat(5-Math.floor(p.rating)); document.getElementById('productModal').classList.add('open'); }
+function closeProductModal(){ document.getElementById('productModal').classList.remove('open'); activeProductModal=null; }
+function addFromModal(){ if(activeProductModal){ addToCart(activeProductModal); closeProductModal(); } }
+function pinFromModal(){ if(activeProductModal){ const p=products.find(x=>x.id===activeProductModal); if(p) pinItemToSlot(p.cat, p.id); closeProductModal(); } }
+
+// ===== CHECKOUT =====
+function openMooreCheckout(){
+  if(!cart.length){ showToast('Cart empty.'); return; }
+  document.getElementById('mooreCheckoutModal').classList.add('open');
+  renderCheckoutSummary();
+  const user=JSON.parse(localStorage.getItem(STORAGE_KEYS.currentUser)||'null');
+  document.getElementById('checkoutLoginPrompt').style.display=user?'none':'block';
 }
-function closeCart() {
-  document.getElementById('cartDrawer').classList.remove('open');
-  document.getElementById('drawerOverlay').classList.remove('open');
+function closeMooreCheckout(){ document.getElementById('mooreCheckoutModal').classList.remove('open'); }
+function renderCheckoutSummary(){
+  const container=document.getElementById('checkoutSummary');
+  const total=cart.reduce((a,c)=>a+c.price*c.qty,0);
+  container.innerHTML=cart.map(i=>`<div class="checkout-item"><span>${i.qty}x ${i.name}</span><span>${fmt(i.price*i.qty)}</span></div>`).join('');
+  container.innerHTML+=`<div class="checkout-total-row"><span>Total</span><span>${fmt(total)}</span></div>`;
+  document.getElementById('depositAmount').textContent=fmt(Math.round(total*0.5));
 }
-
-// ===== ORDER DISPATCH CHECKOUT =====
-function openCheckout() { closeCart(); document.getElementById('checkoutModal').classList.add('open'); }
-function closeCheckout() { document.getElementById('checkoutModal').classList.remove('open'); }
-
-function sendWhatsApp() {
-  const name = document.getElementById('custName').value.trim();
-  const phone = document.getElementById('custPhone').value.trim();
-  const loc = document.getElementById('custLocation').value.trim();
-  if (!name || !phone) { 
-    showCustomAlert('Missing System Coordinates', 'Please enter your configuration identity parameters.'); 
-    return; 
-  }
-  const total = cart.reduce((a,c)=>a+(c.price*c.qty),0);
-  let msg = `Hello ELECTROHUB 👋\n\nI would like to place an order from my Custom Configurator:\n\n`;
-  cart.forEach(item => { msg += `• ${item.qty}x ${item.name} — ${fmt(item.price*item.qty)}\n`; });
-  msg += `\n💰 *Total Config Price: ${fmt(total)}*\n\n`;
-  msg += `👤 Customer: ${name}\n📞 Contact Line: ${phone}`;
-  if (loc) msg += `\n📍 Delivery Location: ${loc}`;
-  msg += `\n\nPlease confirm setup diagnostics and component availability. Thank you!`;
-  openWhatsApp(msg);
-  closeCheckout();
+function processPreOrder(){
+  const user=JSON.parse(localStorage.getItem(STORAGE_KEYS.currentUser)||'null');
+  if(!user){ closeMooreCheckout(); openAuth('login'); showToast('Login to pre-order.'); return; }
+  const name=document.getElementById('coName').value.trim(), phone=document.getElementById('coPhone').value.trim(), location=document.getElementById('coLocation').value.trim();
+  if(!name||!phone){ showToast('Name and phone required.'); return; }
+  const total=cart.reduce((a,c)=>a+c.price*c.qty,0); if(!total)return;
+  const deposit=Math.round(total*0.5), ref='ELEC-'+Math.floor(1000+Math.random()*9000);
+  const preorder={ref,userId:user.id,userName:name,phone,location,items:cart.map(i=>({...i})),total,deposit,date:new Date().toISOString(),status:'pre-ordered'};
+  let preorders=JSON.parse(localStorage.getItem(STORAGE_KEYS.preorders)||'[]');
+  preorders.push(preorder); localStorage.setItem(STORAGE_KEYS.preorders,JSON.stringify(preorders));
+  tempPreOrderData=preorder; cart=[]; saveCart(); updateCartUI(); renderProducts(); closeMooreCheckout();
+  document.getElementById('preorderRef').textContent=ref; document.getElementById('preorderSuccessModal').classList.add('open');
 }
+function openWhatsAppPreOrder(){ if(!tempPreOrderData)return; const p=tempPreOrderData; let msg=`Hello ElectroHub, Pre-Order:\n*Ref:* ${p.ref}\n*Name:* ${p.userName}\n*Phone:* ${p.phone}\n`; if(p.location)msg+=`*Location:* ${p.location}\n`; msg+=`\n*Items:*\n`; p.items.forEach(it=>{msg+=`- ${it.qty}x ${it.name} (${it.brand})\n`;}); msg+=`\n*Total:* ${fmt(p.total)}\n*Deposit:* ${fmt(p.deposit)}`; openWhatsApp(msg); }
+function closePreorderSuccess(){ document.getElementById('preorderSuccessModal').classList.remove('open'); tempPreOrderData=null; }
 
-function openWhatsApp(msg) {
-  const num = '233503010012'; // Direct Routing to WhatsApp Target
-  const url = msg ? `https://wa.me/${num}?text=${encodeURIComponent(msg)}` : `https://wa.me/${num}`;
-  window.open(url, '_blank');
-}
+// ===== UTILITIES =====
+function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
+function openWhatsApp(msg){ const num='233503010012'; window.open(`https://wa.me/${num}?text=${encodeURIComponent(msg||'')}`,'_blank'); }
+function closeCustomAlert(){ document.getElementById('customAlert').classList.remove('open'); }
+function toggleMobileMenu(){ document.getElementById('mobileMenu').classList.toggle('open'); }
+function closeMobileMenu(){ document.getElementById('mobileMenu').classList.remove('open'); }
+function scrollToTop(){ window.scrollTo({top:0,behavior:'smooth'}); }
 
-// ===== SPECIFICATIONS VIEWER MODAL =====
-function openProductModal(id) {
-  const p = products.find(x=>x.id===id);
-  if (!p) return;
-  activeProductModal = id;
-  
-  document.getElementById('pmImg').src = p.image;
-  document.getElementById('pmBrand').textContent = p.brand;
-  document.getElementById('pmName').textContent = p.name;
-  document.getElementById('pmStars').textContent = getStars(p.rating) + ' ' + p.rating + '/5';
-  document.getElementById('pmPrice').textContent = fmt(p.price);
-  document.getElementById('pmSpecs').textContent = p.specs;
-  
-  const pinBtn = document.getElementById('pmPinBtn');
-  const isWorkspaceSlot = builderSlotsConfig.some(s => s.key === p.cat);
-  pinBtn.style.display = isWorkspaceSlot ? 'flex' : 'none';
+// ===== EVENT LISTENERS =====
+document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeCart(); closeMooreCheckout(); closeProductModal(); closeCustomAlert(); closeAuth(); document.getElementById('preorderSuccessModal').classList.remove('open'); } });
+document.getElementById('mooreCheckoutModal').addEventListener('click', function(e){ if(e.target===this) closeMooreCheckout(); });
+document.getElementById('productModal').addEventListener('click', function(e){ if(e.target===this) closeProductModal(); });
+document.getElementById('customAlert').addEventListener('click', function(e){ if(e.target===this) closeCustomAlert(); });
+document.getElementById('customConfirm').addEventListener('click', function(e){ if(e.target===this) this.classList.remove('open'); });
+document.getElementById('loginModal').addEventListener('click', function(e){ if(e.target===this) closeAuth(); });
+document.getElementById('registerModal').addEventListener('click', function(e){ if(e.target===this) closeAuth(); });
+document.getElementById('preorderSuccessModal').addEventListener('click', function(e){ if(e.target===this) closePreorderSuccess(); });
 
-  document.getElementById('productModal').classList.add('open');
-}
-function closeProductModal() { document.getElementById('productModal').classList.remove('open'); activeProductModal = null; }
-function addFromModal() {
-  if (!activeProductModal) return;
-  addToCart(activeProductModal);
-  closeProductModal();
-}
-function pinFromModal() {
-  if (!activeProductModal) return;
-  const p = products.find(x=>x.id===activeProductModal);
-  if (p) { pinItemToSlot(p.cat, p.id); }
-  closeProductModal();
-}
-
-// ===== SYSTEM TOAST NOTIFICATIONS =====
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'), 3000);
-}
-
-// ===== DEVICE SCALES & TRIGGERS =====
-function toggleMobileMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
-function closeMobileMenu() { document.getElementById('mobileMenu').classList.remove('open'); }
-function scrollToTop() { window.scrollTo({top:0,behavior:'smooth'}); }
-
-document.getElementById('checkoutModal').addEventListener('click', function(e) { if(e.target===this) closeCheckout(); });
-document.getElementById('productModal').addEventListener('click', function(e) { if(e.target===this) closeProductModal(); });
-document.addEventListener('keydown', e => { if (e.key==='Escape') { closeCart(); closeCheckout(); closeProductModal(); closeCustomAlert(); } });
-
-window.addEventListener('scroll', () => {
-  const nav = document.getElementById('navbar');
-  if (window.scrollY > 40) nav.classList.add('scrolled'); else nav.classList.remove('scrolled');
-});
-
-// ===== RUN SYSTEM INITS =====
-window.onload = function() {
-  buildCats();
-  buildBrandFilter();
-  renderProducts();
-  renderWorkspace();
-  updateCartUI();
-  
-  // Hero Entrance Animations
-  gsap.fromTo(".hero-content > *", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: "power3.out" });
-  gsap.fromTo(".hero-visual", { opacity: 0, x: 50 }, { opacity: 1, x: 0, duration: 1, delay: 0.3, ease: "power3.out" });
+// ===== INIT =====
+window.onload = function(){
+  buildCats(); buildBrandFilter(); renderProducts(); renderWorkspace(); updateCartUI(); updateAuthUI();
+  // subtle entrance
+  gsap.fromTo(".hero-content > *", { opacity:0, y:20 }, { opacity:1, y:0, duration:0.6, stagger:0.06, ease:"power2.out" });
 };
 </script>
 </body>
